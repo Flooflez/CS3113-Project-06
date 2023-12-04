@@ -237,10 +237,11 @@ void process_input()
         //g_current_scene->m_state.player->m_animation_indices = g_current_scene->m_state.player->m_walking[g_current_scene->m_state.player->DOWN];
     }
 
-    // ————— NORMALISATION ————— //
-    if (glm::length(g_current_scene->m_state.player->get_movement()) > 1.0f)
-    {
-        g_current_scene->m_state.player->set_movement(glm::normalize(g_current_scene->m_state.player->get_movement()));
+    if (key_state[SDL_SCANCODE_LSHIFT]) {
+        g_current_scene->m_state.player->set_speed(2.0f);
+    }
+    else {
+        g_current_scene->m_state.player->set_speed(1.25f);
     }
 }
 
