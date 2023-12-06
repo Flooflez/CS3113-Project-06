@@ -10,12 +10,12 @@
 
 #include "Enemy.h"
 
-void Enemy::ai_activate(Entity* player, float delta_time)
+void Enemy::ai_activate(Entity* player, float delta_time, Map* map)
 {
     switch (m_ai_type)
     {
-    case BASIC:
-        ai_basic(player, delta_time);
+    case JUMP:
+        ai_jump(player, delta_time, map);
         break;
 
     default:
@@ -23,14 +23,54 @@ void Enemy::ai_activate(Entity* player, float delta_time)
     }
 }
 
-void Enemy::ai_basic(Entity* player, float delta_time)
+void Enemy::ai_jump(Entity* player, float delta_time, Map* map)
 {
-    m_attack_timer += delta_time;
-    if (m_attack_timer > 2.0f) {
-        m_attack_timer = 0.0f;
-        m_movement *= -1.0f;
-        m_animation_indices = m_walking[(int)((m_movement.x / 2.0f) + 0.5f)];
+    switch (m_ai_state) {
+    case IDLE:
+        if (glm::distance(player->get_position(), get_position()) < 5.0f) {
+            if (can_see_entity(player, map)) {
+                //round to up down left or right
+                glm::vec3 ray = get_raycast_to(player);
+
+                float angle = glm::atan(ray.y, ray.x);
+                float angleInDegrees = glm::degrees(angle);
+
+                if (angleInDegrees >= -45 && angleInDegrees < 45) {
+
+                    move_right();
+                    m_animation_indices = m_walking[RIGHT];
+                }
+                else if (angleInDegrees >= 45 && angleInDegrees < 135) {
+                    move_up();
+                }
+                else if (angleInDegrees >= -135 && angleInDegrees < -45) {
+                    move_down();
+                }
+                else {
+                    move_left();
+                    m_animation_indices = m_walking[LEFT];
+                }
+
+                m_ai_state = ATTACKING;
+            }
+        }
+        break;
+    case ATTACKING:
+        if (m_collided_bottom || m_collided_left || m_collided_right || m_collided_top) {
+            m_ai_state = INACTIVE;
+            m_attack_timer = 0.0f;
+            set_movement(glm::vec3(0.0f));
+        }
+        break;
+    case INACTIVE:
+        m_attack_timer += delta_time;
+        if (m_attack_timer > 3) {
+            m_ai_state = IDLE;
+        }
+        break;
     }
+
+    
 }
 
 
@@ -46,7 +86,8 @@ void const Enemy::check_collision_x(Entity* collidable_entities, int collidable_
 
 void Enemy::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
 {
-    ai_activate(player, delta_time);
+
+    ai_activate(player, delta_time, map);
     if (m_animation_indices != NULL)
     {
         if (glm::length(m_movement) != 0)
@@ -66,6 +107,11 @@ void Enemy::update(float delta_time, Entity* player, Entity* objects, int object
             }
         }
     }
+    //reset all the flags after since jump enemy relies on these
+    m_collided_top = false;
+    m_collided_bottom = false;
+    m_collided_left = false;
+    m_collided_right = false;
 
     m_base_velocity += m_acceleration * delta_time;
     m_velocity = m_base_velocity + (m_movement * m_speed);

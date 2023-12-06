@@ -1,15 +1,17 @@
 #pragma once
 #include "Entity.h"
 
-enum AIType { BASIC };
-enum AIState { WALKING, IDLE, ATTACKING };
+enum AIType { JUMP, STALK, FOLLOW };
+enum AIState { INACTIVE, IDLE, ATTACKING };
 
 class Enemy : public Entity {
     AIType     m_ai_type;
     AIState    m_ai_state;
 
-    void ai_activate(Entity* player, float delta_time);
-    void ai_basic(Entity* player, float delta_time);
+    void ai_activate(Entity* player, float delta_time, Map* map);
+    void ai_jump(Entity* player, float delta_time, Map* map);
+    void ai_stalk(Entity* player, float delta_time, Map* map);
+    void ai_follow(Entity* player, float delta_time, Map* map);
 
     void const check_collision_y(Entity* collidable_entities, int collidable_entity_count) override;
     void const check_collision_x(Entity* collidable_entities, int collidable_entity_count) override;

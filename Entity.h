@@ -97,6 +97,9 @@ public:
     void activate();
     void deactivate();
 
+    glm::vec3 get_raycast_to(Entity* target);
+    bool can_see_entity(Entity* target, Map* tilemap);
+
 
     // ————— GETTERS ————— //
     glm::vec3  const get_position()       const { return m_position;        };

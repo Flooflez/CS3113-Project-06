@@ -35,8 +35,6 @@
 #include "Utility.h"
 #include "Scene.h"
 #include "LevelA.h"
-#include "LevelB.h"
-#include "LevelC.h"
 #include "Menu.h"
 #include "Win.h"
 
@@ -68,8 +66,6 @@ Scene*  g_current_scene;
 int g_current_scene_index = 0;
 Menu* g_menu;
 LevelA* g_level_a;
-LevelB* g_level_b;
-LevelC* g_level_c;
 Win* g_win_scene;
 
 SDL_Window* g_display_window;
@@ -87,7 +83,7 @@ float g_accumulator     = 0.0f;
 
 GLuint g_text_texture_id;
 
-Scene* g_levels[5];
+Scene* g_levels[3];
 
 int g_lives = 3;
 
@@ -140,15 +136,11 @@ void initialise()
 
     g_menu = new Menu();
     g_level_a = new LevelA();
-    g_level_b = new LevelB();
-    g_level_c = new LevelC();
     g_win_scene = new Win();
 
     g_levels[0] = g_menu;
     g_levels[1] = g_level_a;
-    g_levels[2] = g_level_b;
-    g_levels[3] = g_level_c;
-    g_levels[4] = g_win_scene;
+    g_levels[2] = g_win_scene;
 
     // Start at menu
     switch_to_scene(g_levels[0]);

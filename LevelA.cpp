@@ -126,6 +126,24 @@ void LevelA::initialise()
 
     m_state.enemies = new Enemy[ENEMY_COUNT];
 
+    m_state.enemies[0].m_walking[m_state.enemies[0].LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[0].m_walking[m_state.enemies[0].RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[0].m_walking[m_state.enemies[0].UP] = new int[4] { 2, 6, 10, 14 };
+    m_state.enemies[0].m_walking[m_state.enemies[0].DOWN] = new int[4] { 0, 4, 8, 12 };
+    m_state.enemies[0].m_animation_indices = m_state.enemies[0].m_walking[m_state.enemies[0].RIGHT];
+    m_state.enemies[0].m_animation_frames = 4;
+    m_state.enemies[0].m_animation_index = 0;
+    m_state.enemies[0].m_animation_time = 0.0f;
+    m_state.enemies[0].m_animation_cols = 4;
+    m_state.enemies[0].m_animation_rows = 4;
+
+    m_state.enemies[0].set_ai_type(JUMP);
+    m_state.enemies[0].set_ai_state(IDLE);
+    m_state.enemies[0].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[0].set_position(glm::vec3(32.0f, -45.0f, 0.0f));
+    m_state.enemies[0].set_speed(3.0f);
+    m_state.enemies[0].set_width(0.3f);
+    m_state.enemies[0].set_height(0.8f);
 
 
 

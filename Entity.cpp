@@ -94,7 +94,38 @@ void Entity::activate() {
 };
 void Entity::deactivate() { 
     m_is_active = false; 
-};
+}
+
+glm::vec3 Entity::get_raycast_to(Entity* target)
+{
+    return target->get_position() - get_position();
+}
+
+bool Entity::can_see_entity(Entity* target, Map* tilemap)
+{
+    glm::vec3 ray = get_raycast_to(target);
+    glm::vec3 step = glm::normalize(ray) * 0.1f;
+    //break the ray into parts and check each part
+
+    int iterations = glm::length(step) / glm::length(ray);
+
+    glm::vec3 pos = get_position();
+
+    float dummy_x = 0;
+    float dummy_y = 0;
+
+    //just skip the first check since the entity shouldn't be inside a wall
+    for (int i = 1; i < iterations; i++) {
+        pos += step;
+        if (tilemap->is_solid(pos, &dummy_x, &dummy_y)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 
 
 
