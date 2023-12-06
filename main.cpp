@@ -211,12 +211,16 @@ void process_input()
     if (key_state[SDL_SCANCODE_LEFT])
     {
         g_current_scene->m_state.player->move_left();
-        g_current_scene->m_state.player->m_animation_indices = g_current_scene->m_state.player->m_walking[g_current_scene->m_state.player->LEFT];
+        int dir = g_current_scene->m_state.player->LEFT;
+        g_current_scene->m_state.player->m_animation_indices = g_current_scene->m_state.player->m_walking[dir];
+        g_current_scene->m_state.player->set_facing(dir);
     }
     else if (key_state[SDL_SCANCODE_RIGHT])
     {
         g_current_scene->m_state.player->move_right();
-        g_current_scene->m_state.player->m_animation_indices = g_current_scene->m_state.player->m_walking[g_current_scene->m_state.player->RIGHT];
+        int dir = g_current_scene->m_state.player->RIGHT;
+        g_current_scene->m_state.player->m_animation_indices = g_current_scene->m_state.player->m_walking[dir];
+        g_current_scene->m_state.player->set_facing(dir);
     }
     else if (key_state[SDL_SCANCODE_UP])
     {
@@ -229,7 +233,7 @@ void process_input()
         //g_current_scene->m_state.player->m_animation_indices = g_current_scene->m_state.player->m_walking[g_current_scene->m_state.player->DOWN];
     }
 
-    if (key_state[SDL_SCANCODE_LSHIFT]) {
+    if (key_state[SDL_SCANCODE_LSHIFT]) { //sprint
         g_current_scene->m_state.player->set_speed(2.0f);
     }
     else {

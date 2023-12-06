@@ -73,6 +73,30 @@ void Enemy::ai_jump(Entity* player, float delta_time, Map* map)
     
 }
 
+void Enemy::ai_stalk(Entity* player, float delta_time, Map* map)
+{
+    switch (m_ai_state) {
+    case IDLE:
+        if (check_player_in_area(player) ) {
+            m_ai_state = INACTIVE;
+        }
+        break;
+    case ATTACKING:
+        if (m_collided_bottom || m_collided_left || m_collided_right || m_collided_top) {
+            m_ai_state = INACTIVE;
+            m_attack_timer = 0.0f;
+            set_movement(glm::vec3(0.0f));
+        }
+        break;
+    case INACTIVE:
+        m_attack_timer += delta_time;
+        if (m_attack_timer > 2) {
+            m_ai_state = ATTACKING;
+        }
+        break;
+    }
+}
+
 
 void const Enemy::check_collision_y(Entity* collidable_entities, int collidable_entity_count)
 {
@@ -82,6 +106,19 @@ void const Enemy::check_collision_y(Entity* collidable_entities, int collidable_
 void const Enemy::check_collision_x(Entity* collidable_entities, int collidable_entity_count)
 {
 	return;
+}
+
+bool Enemy::check_player_in_area(Entity* player)
+{
+    glm::vec2 positive_positive = glm::vec2(m_patrol_area.x, m_patrol_area.y);
+    glm::vec2 negative_negative = glm::vec2(m_patrol_area.z, m_patrol_area.w);
+
+    glm::vec3 player_pos = player->get_position();
+
+    bool is_inside = player_pos.x >= negative_negative.x && player_pos.x <= positive_positive.x &&
+        player_pos.y >= negative_negative.y && player_pos.y <= positive_positive.y;
+
+    return is_inside;
 }
 
 void Enemy::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
