@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include <queue>
 
 enum AIType { JUMP, STALK, FOLLOW };
 enum AIState { INACTIVE, IDLE, ATTACKING };
@@ -19,6 +20,10 @@ class Enemy : public Entity {
     glm::vec4 m_patrol_area;
 
     bool check_player_in_area(Entity* player);
+
+    std::queue<glm::vec2> m_follow_queue;
+    void const add_next_pos(glm::vec2 player_pos);
+    glm::vec3 calc_chase_movement();
 
     
 public:

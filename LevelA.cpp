@@ -98,7 +98,8 @@ void LevelA::initialise()
      */
     // Existing
     m_state.player = new Player();
-    m_state.player->set_position(glm::vec3(48.0f, -48.0f, 0.0f));
+    //m_state.player->set_position(glm::vec3(48.0f, -48.0f, 0.0f));
+    m_state.player->set_position(glm::vec3(6.0f, -41.0f, 0.0f));
     m_state.player->set_movement(glm::vec3(0.0f));
     m_state.player->set_speed(1.25f);
     m_state.player->m_texture_id = Utility::load_texture("assets/images/player.png");
@@ -106,8 +107,6 @@ void LevelA::initialise()
     // Walking
     m_state.player->m_walking[m_state.player->LEFT]  = new int[4] { 1, 5, 9,  13 };
     m_state.player->m_walking[m_state.player->RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.player->m_walking[m_state.player->UP]    = new int[4] { 2, 6, 10, 14 };
-    m_state.player->m_walking[m_state.player->DOWN]  = new int[4] { 0, 4, 8,  12 };
 
     m_state.player->m_animation_indices = m_state.player->m_walking[m_state.player->RIGHT];
     m_state.player->m_animation_frames = 4;
@@ -126,11 +125,11 @@ void LevelA::initialise()
 
     m_state.enemies = new Enemy[ENEMY_COUNT];
 
-    m_state.enemies[0].m_walking[m_state.enemies[0].LEFT] = new int[4] { 1, 5, 9, 13 };
-    m_state.enemies[0].m_walking[m_state.enemies[0].RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.enemies[0].m_walking[m_state.enemies[0].UP] = new int[4] { 2, 6, 10, 14 };
-    m_state.enemies[0].m_walking[m_state.enemies[0].DOWN] = new int[4] { 0, 4, 8, 12 };
-    m_state.enemies[0].m_animation_indices = m_state.enemies[0].m_walking[m_state.enemies[0].RIGHT];
+    const int    LEFT = 0, RIGHT = 1, UP = 2,DOWN = 3;
+
+    m_state.enemies[0].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[0].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[0].m_animation_indices = m_state.enemies[0].m_walking[RIGHT];
     m_state.enemies[0].m_animation_frames = 4;
     m_state.enemies[0].m_animation_index = 0;
     m_state.enemies[0].m_animation_time = 0.0f;
@@ -141,15 +140,13 @@ void LevelA::initialise()
     m_state.enemies[0].set_ai_state(IDLE);
     m_state.enemies[0].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
     m_state.enemies[0].set_position(glm::vec3(31.0f, -45.0f, 0.0f));
-    m_state.enemies[0].set_speed(3.5f);
+    m_state.enemies[0].set_speed(3.25f);
     m_state.enemies[0].set_width(0.3f);
     m_state.enemies[0].set_height(0.8f);
 
-    m_state.enemies[1].m_walking[m_state.enemies[1].LEFT] = new int[1] { 3 };
-    m_state.enemies[1].m_walking[m_state.enemies[1].RIGHT] = new int[1] { 1};
-    m_state.enemies[1].m_walking[m_state.enemies[1].UP] = new int[1] { 2};
-    m_state.enemies[1].m_walking[m_state.enemies[1].DOWN] = new int[1] { 0};
-    m_state.enemies[1].m_animation_indices = m_state.enemies[1].m_walking[m_state.enemies[1].RIGHT];
+    m_state.enemies[1].m_walking[LEFT] = new int[1] { 3 };
+    m_state.enemies[1].m_walking[RIGHT] = new int[1] { 1};
+    m_state.enemies[1].m_animation_indices = m_state.enemies[1].m_walking[RIGHT];
     m_state.enemies[1].m_animation_frames = 1;
     m_state.enemies[1].m_animation_index = 0;
     m_state.enemies[1].m_animation_time = 0.0f;
@@ -166,14 +163,101 @@ void LevelA::initialise()
     m_state.enemies[1].deactivate();
     m_state.enemies[1].set_patrol_area(glm::vec4(33.0f, -41.0f, 17.0f, -49.0f));
 
+    m_state.enemies[2].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[2].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[2].m_animation_indices = m_state.enemies[0].m_walking[RIGHT];
+    m_state.enemies[2].m_animation_frames = 4;
+    m_state.enemies[2].m_animation_index = 0;
+    m_state.enemies[2].m_animation_time = 0.0f;
+    m_state.enemies[2].m_animation_cols = 4;
+    m_state.enemies[2].m_animation_rows = 4;
 
+    m_state.enemies[2].set_ai_type(JUMP);
+    m_state.enemies[2].set_ai_state(IDLE);
+    m_state.enemies[2].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[2].set_position(glm::vec3(2.0f, -45.0f, 0.0f));
+    m_state.enemies[2].set_speed(3.25f);
+    m_state.enemies[2].set_width(0.3f);
+    m_state.enemies[2].set_height(0.8f);
+
+    m_state.enemies[3].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[3].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[3].m_animation_indices = m_state.enemies[0].m_walking[RIGHT];
+    m_state.enemies[3].m_animation_frames = 4;
+    m_state.enemies[3].m_animation_index = 0;
+    m_state.enemies[3].m_animation_time = 0.0f;
+    m_state.enemies[3].m_animation_cols = 4;
+    m_state.enemies[3].m_animation_rows = 4;
+
+    m_state.enemies[3].set_ai_type(JUMP);
+    m_state.enemies[3].set_ai_state(IDLE);
+    m_state.enemies[3].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[3].set_position(glm::vec3(10.0f, -35.0f, 0.0f));
+    m_state.enemies[3].set_speed(3.25f);
+    m_state.enemies[3].set_width(0.3f);
+    m_state.enemies[3].set_height(0.8f);
+    
+    m_state.enemies[4].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[4].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[4].m_animation_indices = m_state.enemies[0].m_walking[LEFT];
+    m_state.enemies[4].m_animation_frames = 4;
+    m_state.enemies[4].m_animation_index = 0;
+    m_state.enemies[4].m_animation_time = 0.0f;
+    m_state.enemies[4].m_animation_cols = 4;
+    m_state.enemies[4].m_animation_rows = 4;
+
+    m_state.enemies[4].set_ai_type(JUMP);
+    m_state.enemies[4].set_ai_state(IDLE);
+    m_state.enemies[4].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[4].set_position(glm::vec3(18.0f, -34.0f, 0.0f));
+    m_state.enemies[4].set_speed(3.25f);
+    m_state.enemies[4].set_width(0.3f);
+    m_state.enemies[4].set_height(0.8f);
+
+    m_state.enemies[5].m_walking[LEFT] = new int[1] { 3 };
+    m_state.enemies[5].m_walking[RIGHT] = new int[1] { 1};
+    m_state.enemies[5].m_walking[UP] = new int[1] { 2};
+    m_state.enemies[5].m_walking[DOWN] = new int[1] { 0};
+    m_state.enemies[5].m_animation_indices = m_state.enemies[1].m_walking[RIGHT];
+    m_state.enemies[5].m_animation_frames = 1;
+    m_state.enemies[5].m_animation_index = 0;
+    m_state.enemies[5].m_animation_time = 0.0f;
+    m_state.enemies[5].m_animation_cols = 4;
+    m_state.enemies[5].m_animation_rows = 1;
+
+    m_state.enemies[5].set_ai_type(STALK);
+    m_state.enemies[5].set_ai_state(IDLE);
+    m_state.enemies[5].m_texture_id = Utility::load_texture("assets/images/stalk_monster.png");
+    m_state.enemies[5].set_position(glm::vec3(18.0f, -31.0f, 0.0f));
+    m_state.enemies[5].set_speed(7.5f);
+    m_state.enemies[5].set_width(0.3f);
+    m_state.enemies[5].set_height(0.8f);
+    m_state.enemies[5].deactivate();
+    m_state.enemies[5].set_patrol_area(glm::vec4(32.0f, -27.0f, 9.0f, -40.0f));
+
+    m_state.enemies[6].m_walking[LEFT] = new int[2] { 0,1 };
+    m_state.enemies[6].m_walking[RIGHT] = new int[2] { 2,3};
+    m_state.enemies[6].m_animation_indices = m_state.enemies[1].m_walking[RIGHT];
+    m_state.enemies[6].m_animation_frames = 2;
+    m_state.enemies[6].m_animation_index = 0;
+    m_state.enemies[6].m_animation_time = 0.0f;
+    m_state.enemies[6].m_animation_cols = 2;
+    m_state.enemies[6].m_animation_rows = 2;
+
+    m_state.enemies[6].set_ai_type(FOLLOW);
+    m_state.enemies[6].set_ai_state(IDLE);
+    m_state.enemies[6].m_texture_id = Utility::load_texture("assets/images/chase_monster.png");
+    m_state.enemies[6].set_position(glm::vec3(47.0f, -27.0f, 0.0f));
+    m_state.enemies[6].set_speed(7.5f);
+    m_state.enemies[6].set_width(0.3f);
+    m_state.enemies[6].set_height(0.8f);
+    m_state.enemies[6].deactivate();
+    m_state.enemies[6].set_patrol_area(glm::vec4(49.0f, 0.0f,38.0f, -27.0f));
 
     //Goal
     m_state.goal = new Goal();
     m_state.goal->m_walking[m_state.goal->LEFT] = new int[4] { 1, 5, 9, 13 };
     m_state.goal->m_walking[m_state.goal->RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.goal->m_walking[m_state.goal->UP] = new int[4] { 2, 6, 10, 14 };
-    m_state.goal->m_walking[m_state.goal->DOWN] = new int[4] { 0, 4, 8, 12 };
     m_state.goal->m_animation_frames = 4;
     m_state.goal->m_animation_index = 0;
     m_state.goal->m_animation_time = 0.0f;

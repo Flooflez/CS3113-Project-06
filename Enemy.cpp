@@ -66,13 +66,11 @@ void Enemy::ai_jump(Entity* player, float delta_time, Map* map)
         break;
     case INACTIVE:
         m_attack_timer += delta_time;
-        if (m_attack_timer > 3) {
+        if (m_attack_timer > 1) {
             m_ai_state = IDLE;
         }
         break;
     }
-
-    
 }
 
 void Enemy::ai_stalk(Entity* player, float delta_time, Map* map)
@@ -80,8 +78,6 @@ void Enemy::ai_stalk(Entity* player, float delta_time, Map* map)
     switch (m_ai_state) {
     case IDLE:
         if (check_player_in_area(player) ) {
-            std::cout << "heyo!";
-            activate();
             m_attack_timer = 2.0f; //kickstart first time
             m_ai_state = INACTIVE;
         }
@@ -126,6 +122,44 @@ void Enemy::ai_stalk(Entity* player, float delta_time, Map* map)
     }
 }
 
+void Enemy::ai_follow(Entity* player, float delta_time, Map* map) {
+    switch (m_ai_state) {
+    case IDLE:
+        if (check_player_in_area(player)) {
+            m_attack_timer = 0.0f;
+            m_ai_state = INACTIVE;
+        }
+        break;
+    case ATTACKING:
+        if (check_player_in_area(player)) {
+            m_movement = calc_chase_movement();
+            if (m_movement.x > 0) {
+                m_animation_indices = m_walking[RIGHT];
+            }
+            else {
+                m_animation_indices = m_walking[LEFT];
+            }
+        }
+        else {
+            m_ai_state = IDLE;
+            deactivate();
+        }
+
+        break;
+    case INACTIVE:
+        m_attack_timer += delta_time;
+        if (m_attack_timer > 5) {
+            activate();
+            m_ai_state = ATTACKING;
+        }
+        else {
+            glm::vec3 player_pos = player->get_position();
+            add_next_pos(glm::vec2(player_pos.x, player_pos.y));
+        }
+        break;
+    }
+}
+
 
 void const Enemy::check_collision_y(Entity* collidable_entities, int collidable_entity_count)
 {
@@ -149,6 +183,28 @@ bool Enemy::check_player_in_area(Entity* player)
 
     return is_inside;
 }
+
+void const Enemy::add_next_pos(glm::vec2 player_pos)
+{
+    glm::vec2 difference = m_follow_queue.back() - player_pos;
+    float length = glm::length(difference);
+
+    if(length > 2.0f) //get rid of loitering!
+    m_follow_queue.push(player_pos);
+}
+
+glm::vec3 Enemy::calc_chase_movement()
+{
+    if (m_follow_queue.empty())
+        return glm::vec3(0.0f); //safety
+
+    glm::vec2 enemy_pos_2d = m_follow_queue.front();
+    m_follow_queue.pop();
+
+    return glm::vec3(enemy_pos_2d.x, enemy_pos_2d.y, 0.0f) - get_position();
+}
+
+
 
 void Enemy::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
 {
@@ -190,7 +246,7 @@ void Enemy::update(float delta_time, Entity* player, Entity* objects, int object
     Entity::check_collision_x(map);
     m_position.y += m_velocity.y * delta_time;
     if (m_ai_type != STALK)
-    Entity::check_collision_y(map);
+    Entity::check_collision_y_simple(map);
 
     if (check_collision(player))
     {

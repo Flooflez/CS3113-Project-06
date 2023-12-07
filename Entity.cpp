@@ -104,10 +104,10 @@ glm::vec3 Entity::get_raycast_to(Entity* target)
 bool Entity::can_see_entity(Entity* target, Map* tilemap)
 {
     glm::vec3 ray = get_raycast_to(target);
-    glm::vec3 step = glm::normalize(ray) * 0.1f;
+    glm::vec3 step = glm::normalize(ray) * 0.25f;
     //break the ray into parts and check each part
 
-    int iterations = glm::length(step) / glm::length(ray);
+    int iterations =  glm::length(ray) / glm::length(step);
 
     glm::vec3 pos = get_position();
 
