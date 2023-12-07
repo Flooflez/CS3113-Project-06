@@ -17,7 +17,9 @@ void Enemy::ai_activate(Entity* player, float delta_time, Map* map)
     case JUMP:
         ai_jump(player, delta_time, map);
         break;
-
+    case STALK:
+        ai_stalk(player, delta_time, map);
+        break;
     default:
         break;
     }
@@ -78,19 +80,46 @@ void Enemy::ai_stalk(Entity* player, float delta_time, Map* map)
     switch (m_ai_state) {
     case IDLE:
         if (check_player_in_area(player) ) {
+            std::cout << "heyo!";
+            activate();
+            m_attack_timer = 2.0f; //kickstart first time
             m_ai_state = INACTIVE;
         }
         break;
     case ATTACKING:
-        if (m_collided_bottom || m_collided_left || m_collided_right || m_collided_top) {
-            m_ai_state = INACTIVE;
-            m_attack_timer = 0.0f;
-            set_movement(glm::vec3(0.0f));
+        if (m_facing != player->get_facing()) {
+            deactivate();
+            if (check_player_in_area(player)) {
+                m_attack_timer = (rand() % 26)/10.0f;
+                m_ai_state = INACTIVE;
+            }
+            else {
+                m_ai_state = IDLE;
+            }
         }
+        else {
+            m_position.y = player->get_position().y;
+        }
+        
         break;
     case INACTIVE:
         m_attack_timer += delta_time;
-        if (m_attack_timer > 2) {
+        if (m_attack_timer > 4) {
+            activate();
+            set_position(player->get_position());
+            if (player->get_facing() == LEFT) { //appear on the right
+                m_position.x += 10.0f;
+                move_left();
+                m_facing = LEFT;
+                m_animation_indices = m_walking[LEFT];
+
+            }
+            else{ //appear on the left
+                m_position.x -= 10.0f;
+                m_facing = RIGHT;
+                move_right();
+                m_animation_indices = m_walking[RIGHT];
+            }
             m_ai_state = ATTACKING;
         }
         break;
@@ -125,6 +154,9 @@ void Enemy::update(float delta_time, Entity* player, Entity* objects, int object
 {
 
     ai_activate(player, delta_time, map);
+
+    if (!m_is_active) return;
+
     if (m_animation_indices != NULL)
     {
         if (glm::length(m_movement) != 0)
@@ -154,8 +186,10 @@ void Enemy::update(float delta_time, Entity* player, Entity* objects, int object
     m_velocity = m_base_velocity + (m_movement * m_speed);
 
     m_position.x += m_velocity.x * delta_time;
+    if(m_ai_type != STALK)
     Entity::check_collision_x(map);
     m_position.y += m_velocity.y * delta_time;
+    if (m_ai_type != STALK)
     Entity::check_collision_y(map);
 
     if (check_collision(player))

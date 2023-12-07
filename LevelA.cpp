@@ -140,10 +140,31 @@ void LevelA::initialise()
     m_state.enemies[0].set_ai_type(JUMP);
     m_state.enemies[0].set_ai_state(IDLE);
     m_state.enemies[0].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
-    m_state.enemies[0].set_position(glm::vec3(32.0f, -45.0f, 0.0f));
-    m_state.enemies[0].set_speed(3.0f);
+    m_state.enemies[0].set_position(glm::vec3(31.0f, -45.0f, 0.0f));
+    m_state.enemies[0].set_speed(3.5f);
     m_state.enemies[0].set_width(0.3f);
     m_state.enemies[0].set_height(0.8f);
+
+    m_state.enemies[1].m_walking[m_state.enemies[1].LEFT] = new int[1] { 3 };
+    m_state.enemies[1].m_walking[m_state.enemies[1].RIGHT] = new int[1] { 1};
+    m_state.enemies[1].m_walking[m_state.enemies[1].UP] = new int[1] { 2};
+    m_state.enemies[1].m_walking[m_state.enemies[1].DOWN] = new int[1] { 0};
+    m_state.enemies[1].m_animation_indices = m_state.enemies[1].m_walking[m_state.enemies[1].RIGHT];
+    m_state.enemies[1].m_animation_frames = 1;
+    m_state.enemies[1].m_animation_index = 0;
+    m_state.enemies[1].m_animation_time = 0.0f;
+    m_state.enemies[1].m_animation_cols = 4;
+    m_state.enemies[1].m_animation_rows = 1;
+
+    m_state.enemies[1].set_ai_type(STALK);
+    m_state.enemies[1].set_ai_state(IDLE);
+    m_state.enemies[1].m_texture_id = Utility::load_texture("assets/images/stalk_monster.png");
+    m_state.enemies[1].set_position(glm::vec3(25.0f, -45.0f, 0.0f));
+    m_state.enemies[1].set_speed(7.5f);
+    m_state.enemies[1].set_width(0.3f);
+    m_state.enemies[1].set_height(0.8f);
+    m_state.enemies[1].deactivate();
+    m_state.enemies[1].set_patrol_area(glm::vec4(33.0f, -41.0f, 17.0f, -49.0f));
 
 
 

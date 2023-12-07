@@ -32,6 +32,8 @@ protected:
 
     float m_attack_timer = 0.0f;
 
+    int m_facing;
+
 
 public:
     // ————— STATIC VARIABLES ————— //
@@ -99,6 +101,9 @@ public:
 
     glm::vec3 get_raycast_to(Entity* target);
     bool can_see_entity(Entity* target, Map* tilemap);
+
+    int const get_facing()       const { return m_facing; };
+    void const set_facing(int new_dir) { m_facing = new_dir; };
 
 
     // ————— GETTERS ————— //
