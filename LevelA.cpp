@@ -99,7 +99,7 @@ void LevelA::initialise()
     // Existing
     m_state.player = new Player();
     //m_state.player->set_position(glm::vec3(48.0f, -48.0f, 0.0f));
-    m_state.player->set_position(glm::vec3(6.0f, -41.0f, 0.0f));
+    m_state.player->set_position(glm::vec3(37.0f, -28.0f, 0.0f));
     m_state.player->set_movement(glm::vec3(0.0f));
     m_state.player->set_speed(1.25f);
     m_state.player->m_texture_id = Utility::load_texture("assets/images/player.png");

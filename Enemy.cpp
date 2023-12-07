@@ -20,6 +20,9 @@ void Enemy::ai_activate(Entity* player, float delta_time, Map* map)
     case STALK:
         ai_stalk(player, delta_time, map);
         break;
+    case FOLLOW:
+        ai_follow(player, delta_time, map);
+        break;
     default:
         break;
     }
@@ -186,6 +189,11 @@ bool Enemy::check_player_in_area(Entity* player)
 
 void const Enemy::add_next_pos(glm::vec2 player_pos)
 {
+    if (m_follow_queue.empty()) {
+        m_follow_queue.push(player_pos);
+        return;
+    }
+
     glm::vec2 difference = m_follow_queue.back() - player_pos;
     float length = glm::length(difference);
 
