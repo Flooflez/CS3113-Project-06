@@ -142,6 +142,11 @@ void Enemy::ai_follow(Entity* player, float delta_time, Map* map) {
             else {
                 m_animation_indices = m_walking[LEFT];
             }
+
+            glm::vec3 temp = m_position + m_movement;
+
+            glm::vec3 player_pos = player->get_position();
+            add_next_pos(glm::vec2(player_pos.x, player_pos.y));
         }
         else {
             m_ai_state = IDLE;
@@ -197,8 +202,8 @@ void const Enemy::add_next_pos(glm::vec2 player_pos)
     glm::vec2 difference = m_follow_queue.back() - player_pos;
     float length = glm::length(difference);
 
-    if(length > 2.0f) //get rid of loitering!
-    m_follow_queue.push(player_pos);
+    if (length != 0.0f) //get rid of loitering!
+        m_follow_queue.push(player_pos);
 }
 
 glm::vec3 Enemy::calc_chase_movement()
@@ -206,10 +211,10 @@ glm::vec3 Enemy::calc_chase_movement()
     if (m_follow_queue.empty())
         return glm::vec3(0.0f); //safety
 
-    glm::vec2 enemy_pos_2d = m_follow_queue.front();
+    glm::vec2 player_og_pos_2d = m_follow_queue.front();
     m_follow_queue.pop();
 
-    return glm::vec3(enemy_pos_2d.x, enemy_pos_2d.y, 0.0f) - get_position();
+    return glm::vec3(player_og_pos_2d.x, player_og_pos_2d.y, 0.0f) - get_position();
 }
 
 
@@ -250,10 +255,10 @@ void Enemy::update(float delta_time, Entity* player, Entity* objects, int object
     m_velocity = m_base_velocity + (m_movement * m_speed);
 
     m_position.x += m_velocity.x * delta_time;
-    if(m_ai_type != STALK)
+    if(m_ai_type == JUMP)
     Entity::check_collision_x(map);
     m_position.y += m_velocity.y * delta_time;
-    if (m_ai_type != STALK)
+    if (m_ai_type == JUMP)
     Entity::check_collision_y_simple(map);
 
     if (check_collision(player))
