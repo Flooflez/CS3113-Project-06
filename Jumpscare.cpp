@@ -29,9 +29,9 @@ void Jumpscare::initialise()
     stalk->m_texture_id = Utility::load_texture("assets/images/stalk_monster.png");
 
     // Walking
-    stalk->m_walking[stalk->LEFT] = new int[16] { 0};
+    stalk->m_walking[stalk->LEFT] = new int[1] { 0};
     stalk->m_animation_indices = stalk->m_walking[stalk->LEFT];
-    stalk->m_animation_frames = 4;
+    stalk->m_animation_frames = 1;
     stalk->m_animation_index = 0;
     stalk->m_animation_time = 0.0f;
     stalk->m_animation_cols = 4;
@@ -46,16 +46,16 @@ void Jumpscare::initialise()
     follow->set_position(glm::vec3(0.0f));
     follow->set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     follow->set_speed(0.0f);
-    follow->m_texture_id = Utility::load_texture("assets/images/jump_jumpscare.png");
+    follow->m_texture_id = Utility::load_texture("assets/images/chase_monster.png");
 
     // Walking
-    follow->m_walking[follow->LEFT] = new int[16] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+    follow->m_walking[follow->LEFT] = new int[1] { 0 };
     follow->m_animation_indices = follow->m_walking[follow->LEFT];
-    follow->m_animation_frames = 16;
+    follow->m_animation_frames = 1;
     follow->m_animation_index = 0;
     follow->m_animation_time = 0.0f;
-    follow->m_animation_cols = 4;
-    follow->m_animation_rows = 4;
+    follow->m_animation_cols = 2;
+    follow->m_animation_rows = 2;
     follow->set_height(0.0f);
     follow->set_width(0.0f);
     follow->set_scale(glm::vec3(10.0f));
@@ -75,12 +75,24 @@ void Jumpscare::play_jump(glm::vec3 player_pos)
 
 void Jumpscare::play_stalk(glm::vec3 player_pos)
 {
-
+    if (m_playing) return; //skip if already playing
+    stalk->m_animation_index = 0;
+    stalk->set_position(player_pos + glm::vec3(-0.5f, -5.0f, 0.0f));
+    stalk->activate();
+    stalk->set_scale(glm::vec3(1.0f));
+    m_timer = 0.4f;
+    m_playing = true;
 }
 
 void Jumpscare::play_follow(glm::vec3 player_pos)
 {
-
+    if (m_playing) return; //skip if already playing
+    follow->m_animation_index = 0;
+    follow->set_position(player_pos);
+    follow->activate();
+    follow->set_scale(glm::vec3(0.75f));
+    m_timer = 0.4f;
+    m_playing = true;
 }
 
 

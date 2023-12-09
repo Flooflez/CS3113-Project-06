@@ -292,7 +292,19 @@ void update()
                     g_effects->update(delta_time, 1);
                 }
                 else {
-                    g_jumpscare->play_jump(g_current_scene->m_state.player->get_position());
+                    switch (g_current_scene->m_state.player->get_killer())
+                    {
+                    case 0:
+                        g_jumpscare->play_jump(g_current_scene->m_state.player->get_position());
+                        break;
+                    case 1:
+                        g_jumpscare->play_stalk(g_current_scene->m_state.player->get_position());
+                        break;
+                    case 2:
+                        g_jumpscare->play_follow(g_current_scene->m_state.player->get_position());
+                        break;
+                    }
+                    
                     g_effects->start(BLACK, 0);
                 }
                 
@@ -309,8 +321,6 @@ void update()
             }
             g_effects->update(delta_time, tint_opacity);
         }
-        
-        
 
         g_jumpscare->update(delta_time);
 

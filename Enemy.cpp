@@ -252,6 +252,18 @@ void Enemy::update(float delta_time, Entity* player, Entity* objects, int object
 
     if (check_collision(player))
     {
+        Player* player_player = dynamic_cast<Player*>(player);
+        switch (m_ai_type) {
+        case JUMP:
+            player_player->set_killer(0);
+            break;
+        case STALK:
+            player_player->set_killer(1);
+            break;
+        case FOLLOW:
+            player_player->set_killer(2);
+            break;
+        }
         player->deactivate();
     }
 
