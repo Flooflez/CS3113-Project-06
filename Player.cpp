@@ -42,6 +42,19 @@ void Player::update(float delta_time, Entity* player, Entity* objects, int objec
         }
     }
 
+    m_speed = 1.25f;
+    if (m_is_sprinting) {
+        if (m_sprint_time > 0) {
+            m_speed = 2.0f;
+            m_sprint_time -= delta_time;
+        }
+    }
+    else {
+        if (m_sprint_time < 10) //10 seconds of sprint; 
+        m_sprint_time += delta_time / 2.0f; //regen sprint        
+    }
+
+
     m_base_velocity += m_acceleration * delta_time;
     m_velocity = m_base_velocity + (m_movement * m_speed);
 

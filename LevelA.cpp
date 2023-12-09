@@ -264,10 +264,10 @@ void LevelA::initialise()
     m_state.enemies[7].set_ai_type(JUMP);
     m_state.enemies[7].set_ai_state(IDLE);
     m_state.enemies[7].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
-    m_state.enemies[7].set_position(glm::vec3(36.0f, -3.0f, 0.0f));
-    m_state.enemies[7].set_speed(3.25f);
+    m_state.enemies[7].set_position(glm::vec3(36.0f, -3.25f, 0.0f));
+    m_state.enemies[7].set_speed(2.75f);
     m_state.enemies[7].set_width(0.3f);
-    m_state.enemies[7].set_height(0.8f);
+    m_state.enemies[7].set_height(0.7f);
 
     m_state.enemies[8].m_walking[LEFT] = new int[1] { 3 };
     m_state.enemies[8].m_walking[RIGHT] = new int[1] { 1};
@@ -330,6 +330,40 @@ void LevelA::initialise()
     m_state.enemies[10].deactivate();
     m_state.enemies[10].set_patrol_area(glm::vec4(6.0f, -26.0f, 38.0f, -15.0f));
 
+    m_state.enemies[11].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[11].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[11].m_animation_indices = m_state.enemies[11].m_walking[LEFT];
+    m_state.enemies[11].m_animation_frames = 4;
+    m_state.enemies[11].m_animation_index = 0;
+    m_state.enemies[11].m_animation_time = 0.0f;
+    m_state.enemies[11].m_animation_cols = 4;
+    m_state.enemies[11].m_animation_rows = 4;
+
+    m_state.enemies[11].set_ai_type(JUMP);
+    m_state.enemies[11].set_ai_state(IDLE);
+    m_state.enemies[11].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[11].set_position(glm::vec3(11.0f, -25.0f, 0.0f));
+    m_state.enemies[11].set_speed(2.75f);
+    m_state.enemies[11].set_width(0.3f);
+    m_state.enemies[11].set_height(0.7f);
+
+    m_state.enemies[12].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[12].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[12].m_animation_indices = m_state.enemies[12].m_walking[LEFT];
+    m_state.enemies[12].m_animation_frames = 4;
+    m_state.enemies[12].m_animation_index = 0;
+    m_state.enemies[12].m_animation_time = 0.0f;
+    m_state.enemies[12].m_animation_cols = 4;
+    m_state.enemies[12].m_animation_rows = 4;
+
+    m_state.enemies[12].set_ai_type(JUMP);
+    m_state.enemies[12].set_ai_state(IDLE);
+    m_state.enemies[12].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[12].set_position(glm::vec3(29.0f, -26.0f, 0.0f));
+    m_state.enemies[12].set_speed(2.75f);
+    m_state.enemies[12].set_width(0.3f);
+    m_state.enemies[12].set_height(0.7f);
+
     //Spawnpoints
     m_state.spawnpoints = new Spawnpoint[SPAWNPOINT_COUNT];
     m_state.spawnpoints[0].m_texture_id = Utility::load_texture("assets/images/doll.png");
@@ -355,7 +389,7 @@ void LevelA::initialise()
 
     //Goal
     m_state.goals = new Goal[GOAL_COUNT];
-    m_state.goals[0].m_walking[m_state.goals[0].LEFT] = new int[1] {0};
+    m_state.goals[0].m_walking[LEFT] = new int[1] {0};
     m_state.goals[0].m_animation_frames = 1;
     m_state.goals[0].m_animation_index = 0;
     m_state.goals[0].m_animation_time = 0.0f;
@@ -366,9 +400,9 @@ void LevelA::initialise()
     m_state.goals[0].set_speed(0.0f);
     m_state.goals[0].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     m_state.goals[0].set_scale(glm::vec3(0.5f));
-    m_state.goals[0].m_animation_indices = m_state.goals[0].m_walking[m_state.goals[0].LEFT];
+    m_state.goals[0].m_animation_indices = m_state.goals[0].m_walking[LEFT];
 
-    m_state.goals[1].m_walking[m_state.goals[1].LEFT] = new int[1] {1};
+    m_state.goals[1].m_walking[LEFT] = new int[1] {1};
     m_state.goals[1].m_animation_frames = 1;
     m_state.goals[1].m_animation_index = 0;
     m_state.goals[1].m_animation_time = 0.0f;
@@ -379,9 +413,9 @@ void LevelA::initialise()
     m_state.goals[1].set_speed(0.0f);
     m_state.goals[1].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     m_state.goals[1].set_scale(glm::vec3(0.5f));
-    m_state.goals[1].m_animation_indices = m_state.goals[1].m_walking[m_state.goals[1].LEFT];
+    m_state.goals[1].m_animation_indices = m_state.goals[1].m_walking[LEFT];
 
-    m_state.goals[2].m_walking[m_state.goals[2].LEFT] = new int[1] {2};
+    m_state.goals[2].m_walking[LEFT] = new int[1] {2};
     m_state.goals[2].m_animation_frames = 1;
     m_state.goals[2].m_animation_index = 0;
     m_state.goals[2].m_animation_time = 0.0f;
@@ -392,9 +426,9 @@ void LevelA::initialise()
     m_state.goals[2].set_speed(0.0f);
     m_state.goals[2].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     m_state.goals[2].set_scale(glm::vec3(0.5f));
-    m_state.goals[2].m_animation_indices = m_state.goals[2].m_walking[m_state.goals[2].LEFT];
+    m_state.goals[2].m_animation_indices = m_state.goals[2].m_walking[LEFT];
 
-    m_state.goals[3].m_walking[m_state.goals[3].LEFT] = new int[1] {3};
+    m_state.goals[3].m_walking[LEFT] = new int[1] {3};
     m_state.goals[3].m_animation_frames = 1;
     m_state.goals[3].m_animation_index = 0;
     m_state.goals[3].m_animation_time = 0.0f;
@@ -405,9 +439,9 @@ void LevelA::initialise()
     m_state.goals[3].set_speed(0.0f);
     m_state.goals[3].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     m_state.goals[3].set_scale(glm::vec3(0.5f));
-    m_state.goals[3].m_animation_indices = m_state.goals[3].m_walking[m_state.goals[3].LEFT];
+    m_state.goals[3].m_animation_indices = m_state.goals[3].m_walking[LEFT];
 
-    m_state.goals[4].m_walking[m_state.goals[4].LEFT] = new int[1] {4};
+    m_state.goals[4].m_walking[LEFT] = new int[1] {4};
     m_state.goals[4].m_animation_frames = 1;
     m_state.goals[4].m_animation_index = 0;
     m_state.goals[4].m_animation_time = 0.0f;
@@ -418,9 +452,9 @@ void LevelA::initialise()
     m_state.goals[4].set_speed(0.0f);
     m_state.goals[4].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     m_state.goals[4].set_scale(glm::vec3(0.5f));
-    m_state.goals[4].m_animation_indices = m_state.goals[4].m_walking[m_state.goals[4].LEFT];
+    m_state.goals[4].m_animation_indices = m_state.goals[4].m_walking[LEFT];
 
-    m_state.goals[5].m_walking[m_state.goals[5].LEFT] = new int[1] {5};
+    m_state.goals[5].m_walking[LEFT] = new int[1] {5};
     m_state.goals[5].m_animation_frames = 1;
     m_state.goals[5].m_animation_index = 0;
     m_state.goals[5].m_animation_time = 0.0f;
@@ -431,7 +465,62 @@ void LevelA::initialise()
     m_state.goals[5].set_speed(0.0f);
     m_state.goals[5].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
     m_state.goals[5].set_scale(glm::vec3(0.5f));
-    m_state.goals[5].m_animation_indices = m_state.goals[5].m_walking[m_state.goals[5].LEFT];
+    m_state.goals[5].m_animation_indices = m_state.goals[5].m_walking[LEFT];
+
+    m_state.goals[6].m_walking[LEFT] = new int[1] {6};
+    m_state.goals[6].m_animation_frames = 1;
+    m_state.goals[6].m_animation_index = 0;
+    m_state.goals[6].m_animation_time = 0.0f;
+    m_state.goals[6].m_animation_cols = 10;
+    m_state.goals[6].m_animation_rows = 1;
+    m_state.goals[6].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[6].set_position(glm::vec3(19.0f, -7.0f, 0.0f));
+    m_state.goals[6].set_speed(0.0f);
+    m_state.goals[6].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[6].set_scale(glm::vec3(0.5f));
+    m_state.goals[6].m_animation_indices = m_state.goals[6].m_walking[LEFT];
+
+
+    m_state.goals[7].m_walking[LEFT] = new int[1] {7};
+    m_state.goals[7].m_animation_frames = 1;
+    m_state.goals[7].m_animation_index = 0;
+    m_state.goals[7].m_animation_time = 0.0f;
+    m_state.goals[7].m_animation_cols = 10;
+    m_state.goals[7].m_animation_rows = 1;
+    m_state.goals[7].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[7].set_position(glm::vec3(12.0f, -16.0f, 0.0f));
+    m_state.goals[7].set_speed(0.0f);
+    m_state.goals[7].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[7].set_scale(glm::vec3(0.5f));
+    m_state.goals[7].m_animation_indices = m_state.goals[7].m_walking[LEFT];
+
+    m_state.goals[8].m_walking[LEFT] = new int[1] {8};
+    m_state.goals[8].m_animation_frames = 1;
+    m_state.goals[8].m_animation_index = 0;
+    m_state.goals[8].m_animation_time = 0.0f;
+    m_state.goals[8].m_animation_cols = 10;
+    m_state.goals[8].m_animation_rows = 1;
+    m_state.goals[8].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[8].set_position(glm::vec3(24.0f, -10.0f, 0.0f));
+    m_state.goals[8].set_speed(0.0f);
+    m_state.goals[8].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[8].set_scale(glm::vec3(0.5f));
+    m_state.goals[8].m_animation_indices = m_state.goals[8].m_walking[LEFT];
+
+    m_state.goals[9].m_walking[LEFT] = new int[1] {9};
+    m_state.goals[9].m_animation_frames = 1;
+    m_state.goals[9].m_animation_index = 0;
+    m_state.goals[9].m_animation_time = 0.0f;
+    m_state.goals[9].m_animation_cols = 10;
+    m_state.goals[9].m_animation_rows = 1;
+    m_state.goals[9].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[9].set_position(glm::vec3(30.0f, -26.0f, 0.0f));
+    m_state.goals[9].set_speed(0.0f);
+    m_state.goals[9].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[9].set_scale(glm::vec3(0.5f));
+    m_state.goals[9].m_animation_indices = m_state.goals[9].m_walking[LEFT];
+
+
 
     for (int i = 0; i < m_score; i++) {
         m_state.goals[i].deactivate();

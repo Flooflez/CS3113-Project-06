@@ -62,8 +62,6 @@ const char  FONT_FILEPATH[] = "assets/fonts/font1.png";
 
 const float MILLISECONDS_IN_SECOND = 1000.0;
 
-const std::string DEATH_MESSAGE = "YOU LOSE! BETTER LUCK NEXT TIME!";
-
 // ————— GLOBAL VARIABLES ————— //
 Scene*  g_current_scene;
 int g_current_scene_index = 0;
@@ -76,7 +74,7 @@ bool g_game_is_running = true;
 bool g_game_over = false;
 bool g_game_win = false;
 bool g_game_start = false;
-std::string g_display_message;
+std::string g_display_message = "hewoo world!";
 
 ShaderProgram g_shader_program;
 glm::mat4 g_view_matrix, g_projection_matrix;
@@ -88,11 +86,10 @@ GLuint g_text_texture_id;
 
 Scene* g_levels[3];
 
-int g_lives = 10;
-
 int g_score = 0;
 
-glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
+//glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
+glm::vec3 g_spawn_point = glm::vec3(37.0f, -28.0f, 0.0f);
 
 
 void switch_shader(const char v_path[], const char f_path[]) {
@@ -106,11 +103,6 @@ void switch_shader(const char v_path[], const char f_path[]) {
     g_shader_program.set_view_matrix(g_view_matrix);
 
     glUseProgram(g_shader_program.get_program_id());
-}
-
-void lose_game() {
-    g_game_over = true;
-    g_display_message = DEATH_MESSAGE;
 }
 
 
@@ -252,10 +244,10 @@ void process_input()
     }
 
     if (key_state[SDL_SCANCODE_LSHIFT]) { //sprint
-        g_current_scene->m_state.player->set_speed(2.0f);
+        g_current_scene->m_state.player->set_sprint(true);
     }
     else {
-        g_current_scene->m_state.player->set_speed(1.25f);
+        g_current_scene->m_state.player->set_sprint(false);
     }
 }
 
@@ -277,19 +269,10 @@ void update()
     while (delta_time >= FIXED_TIMESTEP) {
         // ————— UPDATING THE SCENE (i.e. map, character, enemies...) ————— //
         g_current_scene->update(FIXED_TIMESTEP);
+        g_score = g_current_scene->m_score; //update score
 
         if (!g_current_scene->m_state.player->get_active()) {
-            
-            g_score = g_current_scene->m_score; //update score
-            g_lives--;
-            if (g_lives <= 0) {
-                //game over!
-                lose_game();
-            }
-            else {
-                //restart level
-                switch_to_scene(g_levels[g_current_scene_index]);
-            }
+            switch_to_scene(g_levels[g_current_scene_index]); //switch to jumpscare?
         }
 
         delta_time -= FIXED_TIMESTEP;
@@ -317,21 +300,10 @@ void render()
     g_current_scene->render(&g_shader_program);
 
     // ----- TEXT ----- //
-    if (g_game_over) {
-        float draw_x = 0.5167255f;
-        if (g_current_scene->get_state().player->get_position().x > LEVEL_LEFT_EDGE) {
-            draw_x = g_current_scene->m_state.player->get_position().x - 4.5f;
-            
-        }
-        float draw_y = -5.0f;
-        if (g_current_scene->get_state().player->get_position().y > -5.5f) {
-            draw_y = -g_current_scene->get_state().player->get_position().y + 2.0f;
-        }
+    float draw_x = g_current_scene->m_state.player->get_position().x;
+    float draw_y = g_current_scene->m_state.player->get_position().y + 2.0f;
 
-
-        Utility::draw_text(g_text_texture_id, g_display_message, 0.4f, -0.1f, glm::vec3(draw_x, draw_y, 0));
-        
-    }
+    Utility::draw_text(g_text_texture_id, g_display_message, 0.4f, -0.1f, glm::vec3(draw_x, draw_y, 0));
 
     SDL_GL_SwapWindow(g_display_window);
 }

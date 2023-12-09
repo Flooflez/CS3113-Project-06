@@ -211,7 +211,6 @@ glm::vec3 Enemy::calc_chase_movement()
 
 void Enemy::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
 {
-
     ai_activate(player, delta_time, map);
 
     if (!m_is_active) return;

@@ -3,7 +3,7 @@
 class LevelA : public Scene {
 public:
     // ————— STATIC ATTRIBUTES ————— //
-    const int ENEMY_COUNT = 11;
+    const int ENEMY_COUNT = 13;
     const int SPAWNPOINT_COUNT = 4;
     const int GOAL_COUNT = 10;
 
