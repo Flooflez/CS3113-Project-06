@@ -37,6 +37,8 @@
 #include "LevelA.h"
 #include "Menu.h"
 #include "Win.h"
+#include "Effects.h"
+#include "Jumpscare.h"
 
 // ————— CONSTANTS ————— //
 const int   WINDOW_WIDTH    = 640,
@@ -87,6 +89,9 @@ GLuint g_text_texture_id;
 Scene* g_levels[3];
 
 int g_score = 0;
+
+Effects *g_effects;
+Jumpscare* g_jumpscare;
 
 //glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
 glm::vec3 g_spawn_point = glm::vec3(37.0f, -28.0f, 0.0f);
@@ -163,6 +168,10 @@ void initialise()
 
     // ----- TEXT ----- //
     g_text_texture_id = Utility::load_texture(FONT_FILEPATH);
+
+    g_effects = new Effects(g_projection_matrix, g_view_matrix);
+    g_jumpscare = new Jumpscare();
+    g_jumpscare->initialise();
 }
 
 void process_input()
@@ -272,8 +281,38 @@ void update()
         g_score = g_current_scene->m_score; //update score
 
         if (!g_current_scene->m_state.player->get_active()) {
-            switch_to_scene(g_levels[g_current_scene_index]); //switch to jumpscare?
+
+            if (g_jumpscare->finished_playing()) {
+                switch_to_scene(g_levels[g_current_scene_index]);
+                g_jumpscare->reset();
+                g_effects->update(delta_time, 0);
+            }
+            else {
+                if (g_jumpscare->started_playing()) {
+                    g_effects->update(delta_time, 1);
+                }
+                else {
+                    g_jumpscare->play_jump(g_current_scene->m_state.player->get_position());
+                    g_effects->start(BLACK, 0);
+                }
+                
+            }
+            
         }
+        else {
+            float tint_opacity = -0.01f * g_current_scene->m_state.player->get_sprint_time() + 0.1f;
+            if (tint_opacity < 0) {
+                tint_opacity = 0;
+            }
+            else {
+                g_effects->start(TINT, 0);
+            }
+            g_effects->update(delta_time, tint_opacity);
+        }
+        
+        
+
+        g_jumpscare->update(delta_time);
 
         delta_time -= FIXED_TIMESTEP;
     }
@@ -300,10 +339,14 @@ void render()
     g_current_scene->render(&g_shader_program);
 
     // ----- TEXT ----- //
-    float draw_x = g_current_scene->m_state.player->get_position().x;
-    float draw_y = g_current_scene->m_state.player->get_position().y + 2.0f;
+    //float draw_x = g_current_scene->m_state.player->get_position().x;
+    //float draw_y = g_current_scene->m_state.player->get_position().y + 2.0f;
 
-    Utility::draw_text(g_text_texture_id, g_display_message, 0.4f, -0.1f, glm::vec3(draw_x, draw_y, 0));
+    //Utility::draw_text(g_text_texture_id, g_display_message, 0.4f, -0.1f, glm::vec3(draw_x, draw_y, 0));
+    
+    g_effects->render();
+
+    g_jumpscare->render(&g_shader_program);
 
     SDL_GL_SwapWindow(g_display_window);
 }

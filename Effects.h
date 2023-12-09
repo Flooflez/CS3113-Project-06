@@ -14,10 +14,25 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-enum EffectType { TINT };
-
-
+enum EffectType { NONE, TINT, BLACK};
 
 class Effects {
+private:
+    ShaderProgram m_program;
+    EffectType    m_current_effect;
 
+    float m_alpha;
+    float m_effect_speed;
+    glm::vec3 m_size = glm::vec3(10.0f);
+    float m_time_left;
+
+public:
+    glm::vec3 m_view_offset;
+
+    Effects(glm::mat4 projection_matrix, glm::mat4 view_matrix);
+
+    void draw_overlay();
+    void start(EffectType effect_type, float effect_speed);
+    void update(float delta_time, float param);
+    void render();
 };
