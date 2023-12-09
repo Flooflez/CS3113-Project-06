@@ -23,24 +23,12 @@ void Win::initialise()
 {
     text_texture_id = Utility::load_texture("assets/fonts/font1.png");
 
-    /**
-     BGM and SFX
-     */
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
-
-    m_state.bgm = Mix_LoadMUS("assets/audio/badsong.wav");
-    Mix_PlayMusic(m_state.bgm, -1);
-    //Mix_VolumeMusic(2.3f);
-    Mix_VolumeMusic(0.0f);
-
     //fake player so program doesn't crash
     m_state.player = new Player();
     m_state.player->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
     m_state.player->set_movement(glm::vec3(0.0f));
     m_state.player->set_speed(0.0f);
     m_state.player->set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
-
-
 }
 
 void Win::update(float delta_time)
@@ -51,6 +39,6 @@ void Win::update(float delta_time)
 
 void Win::render(ShaderProgram* program)
 {
-    Utility::draw_text(text_texture_id, "YOU WIN!", 0.6f, -0.1f, glm::vec3(3.3f, 0.5f, 0));
-    Utility::draw_text(text_texture_id, "Thanks for playing", 0.4f, -0.1f, glm::vec3(2.6f, -0.5f, 0));
+    Utility::draw_text(text_texture_id, "YOU WIN!", 0.6f, -0.1f, glm::vec3(0.0f, 0.0f, 0));
+    Utility::draw_text(text_texture_id, "Thanks for playing", 0.4f, -0.1f, glm::vec3(0.0f, -0.5f, 0));
 }

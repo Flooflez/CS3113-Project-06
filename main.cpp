@@ -280,6 +280,15 @@ void update()
         g_current_scene->update(FIXED_TIMESTEP);
         g_score = g_current_scene->m_score; //update score
 
+        if(g_score == 10){
+            //WIN!
+            switch_shader(V_SHADER_PATH, F_SHADER_PATH);
+            switch_to_scene(g_levels[g_current_scene_index + 1]);
+            g_score = 0;
+            return;
+            
+        }
+
         if (!g_current_scene->m_state.player->get_active()) {
 
             if (g_jumpscare->finished_playing()) {

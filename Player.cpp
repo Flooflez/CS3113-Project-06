@@ -65,11 +65,7 @@ void Player::update(float delta_time, Entity* player, Entity* objects, int objec
     
     m_position.x += m_velocity.x * delta_time;
     Entity::check_collision_x(map);
-
     
-    
-    
-
     if (m_is_jumping)
     {
         m_is_jumping = false;
