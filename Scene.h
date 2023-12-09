@@ -58,6 +58,8 @@ public:
     // ----- Setters ----- //
     void set_spawn(glm::vec3 new_spawn) {m_spawn = new_spawn;}
 
+    int m_score = 0;
+
 protected:
     GLuint text_texture_id;
 };

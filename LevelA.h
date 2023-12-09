@@ -4,10 +4,9 @@ class LevelA : public Scene {
 public:
     // ————— STATIC ATTRIBUTES ————— //
     const int ENEMY_COUNT = 11;
-    const int SPAWNPOINT_COUNT = 3;
+    const int SPAWNPOINT_COUNT = 4;
     const int GOAL_COUNT = 10;
 
-    int m_score = 0;
     
     // ————— CONSTRUCTOR ————— //
     ~LevelA();

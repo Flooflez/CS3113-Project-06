@@ -17,7 +17,7 @@ void Goal::update(float delta_time, Entity* player, Entity* objects, int object_
 
     if (check_collision(player))
     {
-        m_picked = 0;
+        m_picked = true;
         deactivate();
     }
 

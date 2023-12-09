@@ -88,7 +88,9 @@ GLuint g_text_texture_id;
 
 Scene* g_levels[3];
 
-int g_lives = 3;
+int g_lives = 10;
+
+int g_score = 0;
 
 glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
 
@@ -116,6 +118,7 @@ void lose_game() {
 void switch_to_scene(Scene* scene)
 {
     g_current_scene = scene;
+    g_current_scene->m_score = g_score;
     g_current_scene->initialise();
 }
 
@@ -276,6 +279,8 @@ void update()
         g_current_scene->update(FIXED_TIMESTEP);
 
         if (!g_current_scene->m_state.player->get_active()) {
+            
+            g_score = g_current_scene->m_score; //update score
             g_lives--;
             if (g_lives <= 0) {
                 //game over!

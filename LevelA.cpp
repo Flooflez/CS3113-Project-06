@@ -332,45 +332,25 @@ void LevelA::initialise()
 
     //Spawnpoints
     m_state.spawnpoints = new Spawnpoint[SPAWNPOINT_COUNT];
-    m_state.spawnpoints[0].m_walking[LEFT] = new int[1] { 1 };
-    m_state.spawnpoints[0].m_walking[RIGHT] = new int[1] { 3 };
-    m_state.spawnpoints[0].m_animation_frames = 1;
-    m_state.spawnpoints[0].m_animation_index = 0;
-    m_state.spawnpoints[0].m_animation_time = 0.0f;
-    m_state.spawnpoints[0].m_animation_cols = 1;
-    m_state.spawnpoints[0].m_animation_rows = 1;
-    m_state.spawnpoints[0].m_texture_id = Utility::load_texture("assets/images/cat.png");
+    m_state.spawnpoints[0].m_texture_id = Utility::load_texture("assets/images/doll.png");
     m_state.spawnpoints[0].set_position(glm::vec3(44.0f, -36.0f, 0.0f));
     m_state.spawnpoints[0].set_speed(0.0f);
     m_state.spawnpoints[0].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
-    m_state.spawnpoints[0].m_animation_indices = m_state.spawnpoints[0].m_walking[RIGHT];
 
-    m_state.spawnpoints[1].m_walking[LEFT] = new int[1] { 1 };
-    m_state.spawnpoints[1].m_walking[RIGHT] = new int[1] { 3 };
-    m_state.spawnpoints[1].m_animation_frames = 1;
-    m_state.spawnpoints[1].m_animation_index = 0;
-    m_state.spawnpoints[1].m_animation_time = 0.0f;
-    m_state.spawnpoints[1].m_animation_cols = 1;
-    m_state.spawnpoints[1].m_animation_rows = 1;
-    m_state.spawnpoints[1].m_texture_id = Utility::load_texture("assets/images/cat.png");
-    m_state.spawnpoints[1].set_position(glm::vec3(36.0f, -33.5f, 0.0f));
+    m_state.spawnpoints[1].m_texture_id = Utility::load_texture("assets/images/doll.png");
+    m_state.spawnpoints[1].set_position(glm::vec3(1.0f, -38.0f, 0.0f));
     m_state.spawnpoints[1].set_speed(0.0f);
     m_state.spawnpoints[1].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
-    m_state.spawnpoints[1].m_animation_indices = m_state.spawnpoints[1].m_walking[RIGHT];
 
-    m_state.spawnpoints[2].m_walking[LEFT] = new int[1] { 1 };
-    m_state.spawnpoints[2].m_walking[RIGHT] = new int[1] { 3 };
-    m_state.spawnpoints[2].m_animation_frames = 1;
-    m_state.spawnpoints[2].m_animation_index = 0;
-    m_state.spawnpoints[2].m_animation_time = 0.0f;
-    m_state.spawnpoints[2].m_animation_cols = 1;
-    m_state.spawnpoints[2].m_animation_rows = 1;
-    m_state.spawnpoints[2].m_texture_id = Utility::load_texture("assets/images/cat.png");
-    m_state.spawnpoints[2].set_position(glm::vec3(3.0f, -23.5f, 0.0f));
+    m_state.spawnpoints[2].m_texture_id = Utility::load_texture("assets/images/doll.png");
+    m_state.spawnpoints[2].set_position(glm::vec3(36.0f, -33.5f, 0.0f));
     m_state.spawnpoints[2].set_speed(0.0f);
     m_state.spawnpoints[2].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
-    m_state.spawnpoints[2].m_animation_indices = m_state.spawnpoints[2].m_walking[RIGHT];
 
+    m_state.spawnpoints[3].m_texture_id = Utility::load_texture("assets/images/doll.png");
+    m_state.spawnpoints[3].set_position(glm::vec3(3.0f, -23.5f, 0.0f));
+    m_state.spawnpoints[3].set_speed(0.0f);
+    m_state.spawnpoints[3].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
     
 
     //Goal
@@ -453,6 +433,10 @@ void LevelA::initialise()
     m_state.goals[5].set_scale(glm::vec3(0.5f));
     m_state.goals[5].m_animation_indices = m_state.goals[5].m_walking[m_state.goals[5].LEFT];
 
+    for (int i = 0; i < m_score; i++) {
+        m_state.goals[i].deactivate();
+    }
+
     
     m_state.jump_sfx = Mix_LoadWAV("assets/audio/woop.wav");
 }
@@ -490,7 +474,6 @@ void LevelA::update(float delta_time)
 void LevelA::render(ShaderProgram *program)
 {
     m_state.map->render(program);
-    m_state.player->render(program);
     
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
@@ -500,6 +483,9 @@ void LevelA::render(ShaderProgram *program)
     {
         m_state.spawnpoints[i].render(program);
     }
+
+    m_state.player->render(program);
+
     for (int i = 0; i < GOAL_COUNT; i++)
     {
         m_state.goals[i].render(program);
