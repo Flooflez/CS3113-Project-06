@@ -52,8 +52,11 @@ const int   VIEWPORT_X = 0,
             VIEWPORT_WIDTH = WINDOW_WIDTH,
             VIEWPORT_HEIGHT = WINDOW_HEIGHT;
 
-const char  V_SHADER_PATH[] = "shaders/vertex_lit.glsl",
-            F_SHADER_PATH[] = "shaders/fragment_lit.glsl";
+const char  V_LIT_SHADER_PATH[] = "shaders/vertex_lit.glsl",
+            F_LIT_SHADER_PATH[] = "shaders/fragment_lit.glsl";
+
+const char  V_SHADER_PATH[] = "shaders/vertex_textured.glsl",
+            F_SHADER_PATH[] = "shaders/fragment_textured.glsl";
 
 const char  FONT_FILEPATH[] = "assets/fonts/font1.png";
 
@@ -87,6 +90,20 @@ Scene* g_levels[3];
 
 int g_lives = 3;
 
+
+void switch_shader(const char v_path[], const char f_path[]) {
+    g_shader_program.load(v_path, f_path);
+    Utility::set_shader_program(&g_shader_program);
+
+    g_view_matrix = glm::mat4(1.0f);
+    g_projection_matrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
+
+    g_shader_program.set_projection_matrix(g_projection_matrix);
+    g_shader_program.set_view_matrix(g_view_matrix);
+
+    glUseProgram(g_shader_program.get_program_id());
+}
+
 void lose_game() {
     g_game_over = true;
     g_display_message = DEATH_MESSAGE;
@@ -119,16 +136,7 @@ void initialise()
     // ————— GENERAL ————— //
     glViewport(VIEWPORT_X, VIEWPORT_Y, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 
-    g_shader_program.load(V_SHADER_PATH, F_SHADER_PATH);
-    Utility::set_shader_program(&g_shader_program);
-
-    g_view_matrix = glm::mat4(1.0f);
-    g_projection_matrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
-
-    g_shader_program.set_projection_matrix(g_projection_matrix);
-    g_shader_program.set_view_matrix(g_view_matrix);
-
-    glUseProgram(g_shader_program.get_program_id());
+    switch_shader(V_SHADER_PATH, F_SHADER_PATH);
 
     glClearColor(BG_RED, BG_GREEN, BG_BLUE, BG_OPACITY);
 
@@ -193,6 +201,9 @@ void process_input()
                 //start game
                 if (!g_game_start) {
                     g_game_start = true;
+                    
+                    switch_shader(V_LIT_SHADER_PATH, F_LIT_SHADER_PATH);
+                    
                     g_current_scene->m_state.next_scene_id = 1;
                 }
                 break;
