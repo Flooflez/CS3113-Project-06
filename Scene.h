@@ -18,6 +18,7 @@
 #include "Enemy.h"
 #include "Goal.h"
 #include "Map.h"
+#include "Spawnpoint.h"
 
 /**
     Notice that the game's state is now part of the Scene class, not the main file.
@@ -28,7 +29,8 @@ struct GameState
     Map *map;
     Player *player = nullptr;
     Enemy *enemies;
-    Goal* goal;
+    Goal* goals;
+    Spawnpoint* spawnpoints;
     
     // ————— AUDIO ————— //
     Mix_Music *bgm;
@@ -36,13 +38,13 @@ struct GameState
     
     // ————— POINTERS TO OTHER SCENES ————— //
     int next_scene_id = -1;
+
 };
 
 class Scene {
 public:
     // ————— ATTRIBUTES ————— //
-    int m_number_of_enemies = 3;
-    
+    glm::vec3 m_spawn;
     GameState m_state;
     
     // ————— METHODS ————— //
@@ -52,7 +54,10 @@ public:
     
     // ————— GETTERS ————— //
     GameState const get_state()             const { return m_state;             }
-    int       const get_number_of_enemies() const { return m_number_of_enemies; }
+
+    // ----- Setters ----- //
+    void set_spawn(glm::vec3 new_spawn) {m_spawn = new_spawn;}
+
 protected:
     GLuint text_texture_id;
 };

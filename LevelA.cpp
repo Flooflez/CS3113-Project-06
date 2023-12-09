@@ -81,6 +81,7 @@ unsigned int LEVELA_DATA[] =
 LevelA::~LevelA()
 {
     delete [] m_state.enemies;
+    delete [] m_state.spawnpoints;
     delete    m_state.player;
     delete    m_state.map;
     Mix_FreeChunk(m_state.jump_sfx);
@@ -93,13 +94,10 @@ void LevelA::initialise()
     m_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELA_DATA, map_texture_id, 1.0f, 15, 1);
     
     // Code from main.cpp's initialise()
-    /**
-     George's Stuff
-     */
+
     // Existing
     m_state.player = new Player();
-    //m_state.player->set_position(glm::vec3(48.0f, -48.0f, 0.0f));
-    m_state.player->set_position(glm::vec3(37.0f, -28.0f, 0.0f));
+    m_state.player->set_position(m_spawn);
     m_state.player->set_movement(glm::vec3(0.0f));
     m_state.player->set_speed(1.25f);
     m_state.player->m_texture_id = Utility::load_texture("assets/images/player.png");
@@ -165,7 +163,7 @@ void LevelA::initialise()
 
     m_state.enemies[2].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
     m_state.enemies[2].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.enemies[2].m_animation_indices = m_state.enemies[0].m_walking[RIGHT];
+    m_state.enemies[2].m_animation_indices = m_state.enemies[2].m_walking[RIGHT];
     m_state.enemies[2].m_animation_frames = 4;
     m_state.enemies[2].m_animation_index = 0;
     m_state.enemies[2].m_animation_time = 0.0f;
@@ -182,7 +180,7 @@ void LevelA::initialise()
 
     m_state.enemies[3].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
     m_state.enemies[3].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.enemies[3].m_animation_indices = m_state.enemies[0].m_walking[RIGHT];
+    m_state.enemies[3].m_animation_indices = m_state.enemies[3].m_walking[RIGHT];
     m_state.enemies[3].m_animation_frames = 4;
     m_state.enemies[3].m_animation_index = 0;
     m_state.enemies[3].m_animation_time = 0.0f;
@@ -199,7 +197,7 @@ void LevelA::initialise()
     
     m_state.enemies[4].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
     m_state.enemies[4].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.enemies[4].m_animation_indices = m_state.enemies[0].m_walking[LEFT];
+    m_state.enemies[4].m_animation_indices = m_state.enemies[4].m_walking[LEFT];
     m_state.enemies[4].m_animation_frames = 4;
     m_state.enemies[4].m_animation_index = 0;
     m_state.enemies[4].m_animation_time = 0.0f;
@@ -218,7 +216,7 @@ void LevelA::initialise()
     m_state.enemies[5].m_walking[RIGHT] = new int[1] { 1};
     m_state.enemies[5].m_walking[UP] = new int[1] { 2};
     m_state.enemies[5].m_walking[DOWN] = new int[1] { 0};
-    m_state.enemies[5].m_animation_indices = m_state.enemies[1].m_walking[RIGHT];
+    m_state.enemies[5].m_animation_indices = m_state.enemies[5].m_walking[RIGHT];
     m_state.enemies[5].m_animation_frames = 1;
     m_state.enemies[5].m_animation_index = 0;
     m_state.enemies[5].m_animation_time = 0.0f;
@@ -237,7 +235,7 @@ void LevelA::initialise()
 
     m_state.enemies[6].m_walking[LEFT] = new int[2] { 0,1 };
     m_state.enemies[6].m_walking[RIGHT] = new int[2] { 2,3};
-    m_state.enemies[6].m_animation_indices = m_state.enemies[1].m_walking[RIGHT];
+    m_state.enemies[6].m_animation_indices = m_state.enemies[6].m_walking[RIGHT];
     m_state.enemies[6].m_animation_frames = 2;
     m_state.enemies[6].m_animation_index = 0;
     m_state.enemies[6].m_animation_time = 0.0f;
@@ -249,26 +247,211 @@ void LevelA::initialise()
     m_state.enemies[6].m_texture_id = Utility::load_texture("assets/images/chase_monster.png");
     m_state.enemies[6].set_position(glm::vec3(47.0f, -27.0f, 0.0f));
     m_state.enemies[6].set_speed(1.0f);
-    m_state.enemies[6].set_width(0.3f);
+    m_state.enemies[6].set_width(0.8f);
     m_state.enemies[6].set_height(0.8f);
     m_state.enemies[6].deactivate();
     m_state.enemies[6].set_patrol_area(glm::vec4(49.0f, 0.0f,38.0f, -27.0f));
 
+    m_state.enemies[7].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
+    m_state.enemies[7].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
+    m_state.enemies[7].m_animation_indices = m_state.enemies[7].m_walking[LEFT];
+    m_state.enemies[7].m_animation_frames = 4;
+    m_state.enemies[7].m_animation_index = 0;
+    m_state.enemies[7].m_animation_time = 0.0f;
+    m_state.enemies[7].m_animation_cols = 4;
+    m_state.enemies[7].m_animation_rows = 4;
+
+    m_state.enemies[7].set_ai_type(JUMP);
+    m_state.enemies[7].set_ai_state(IDLE);
+    m_state.enemies[7].m_texture_id = Utility::load_texture("assets/images/jump_monster.png");
+    m_state.enemies[7].set_position(glm::vec3(36.0f, -3.0f, 0.0f));
+    m_state.enemies[7].set_speed(3.25f);
+    m_state.enemies[7].set_width(0.3f);
+    m_state.enemies[7].set_height(0.8f);
+
+    m_state.enemies[8].m_walking[LEFT] = new int[1] { 3 };
+    m_state.enemies[8].m_walking[RIGHT] = new int[1] { 1};
+    m_state.enemies[8].m_walking[UP] = new int[1] { 2};
+    m_state.enemies[8].m_walking[DOWN] = new int[1] { 0};
+    m_state.enemies[8].m_animation_indices = m_state.enemies[8].m_walking[RIGHT];
+    m_state.enemies[8].m_animation_frames = 1;
+    m_state.enemies[8].m_animation_index = 0;
+    m_state.enemies[8].m_animation_time = 0.0f;
+    m_state.enemies[8].m_animation_cols = 4;
+    m_state.enemies[8].m_animation_rows = 1;
+
+    m_state.enemies[8].set_ai_type(STALK);
+    m_state.enemies[8].set_ai_state(IDLE);
+    m_state.enemies[8].m_texture_id = Utility::load_texture("assets/images/stalk_monster.png");
+    m_state.enemies[8].set_position(glm::vec3(17.0f, -11.0f, 0.0f));
+    m_state.enemies[8].set_speed(7.5f);
+    m_state.enemies[8].set_width(0.3f);
+    m_state.enemies[8].set_height(0.8f);
+    m_state.enemies[8].deactivate();
+    m_state.enemies[8].set_patrol_area(glm::vec4(0.0f, -14.0f, 22.0f, -4.0f));
+
+    m_state.enemies[9].m_walking[LEFT] = new int[2] { 0, 1 };
+    m_state.enemies[9].m_walking[RIGHT] = new int[2] { 2, 3};
+    m_state.enemies[9].m_animation_indices = m_state.enemies[9].m_walking[RIGHT];
+    m_state.enemies[9].m_animation_frames = 2;
+    m_state.enemies[9].m_animation_index = 0;
+    m_state.enemies[9].m_animation_time = 0.0f;
+    m_state.enemies[9].m_animation_cols = 2;
+    m_state.enemies[9].m_animation_rows = 2;
+
+    m_state.enemies[9].set_ai_type(FOLLOW);
+    m_state.enemies[9].set_ai_state(IDLE);
+    m_state.enemies[9].m_texture_id = Utility::load_texture("assets/images/chase_monster.png");
+    m_state.enemies[9].set_position(glm::vec3(28.0f, -20.0f, 0.0f));
+    m_state.enemies[9].set_speed(1.0f);
+    m_state.enemies[9].set_width(0.8f);
+    m_state.enemies[9].set_height(0.8f);
+    m_state.enemies[9].deactivate();
+    m_state.enemies[9].set_patrol_area(glm::vec4(6.0f, -26.0f, 38.0f, -15.0f));
+
+    m_state.enemies[10].m_walking[LEFT] = new int[1] { 3 };
+    m_state.enemies[10].m_walking[RIGHT] = new int[1] { 1};
+    m_state.enemies[10].m_walking[UP] = new int[1] { 2};
+    m_state.enemies[10].m_walking[DOWN] = new int[1] { 0};
+    m_state.enemies[10].m_animation_indices = m_state.enemies[10].m_walking[RIGHT];
+    m_state.enemies[10].m_animation_frames = 1;
+    m_state.enemies[10].m_animation_index = 0;
+    m_state.enemies[10].m_animation_time = 0.0f;
+    m_state.enemies[10].m_animation_cols = 4;
+    m_state.enemies[10].m_animation_rows = 1;
+
+    m_state.enemies[10].set_ai_type(STALK);
+    m_state.enemies[10].set_ai_state(IDLE);
+    m_state.enemies[10].m_texture_id = Utility::load_texture("assets/images/stalk_monster.png");
+    m_state.enemies[10].set_position(glm::vec3(28.0f, -19.0f, 0.0f));
+    m_state.enemies[10].set_speed(7.5f);
+    m_state.enemies[10].set_width(0.3f);
+    m_state.enemies[10].set_height(0.8f);
+    m_state.enemies[10].deactivate();
+    m_state.enemies[10].set_patrol_area(glm::vec4(6.0f, -26.0f, 38.0f, -15.0f));
+
+    //Spawnpoints
+    m_state.spawnpoints = new Spawnpoint[SPAWNPOINT_COUNT];
+    m_state.spawnpoints[0].m_walking[LEFT] = new int[1] { 1 };
+    m_state.spawnpoints[0].m_walking[RIGHT] = new int[1] { 3 };
+    m_state.spawnpoints[0].m_animation_frames = 1;
+    m_state.spawnpoints[0].m_animation_index = 0;
+    m_state.spawnpoints[0].m_animation_time = 0.0f;
+    m_state.spawnpoints[0].m_animation_cols = 1;
+    m_state.spawnpoints[0].m_animation_rows = 1;
+    m_state.spawnpoints[0].m_texture_id = Utility::load_texture("assets/images/cat.png");
+    m_state.spawnpoints[0].set_position(glm::vec3(44.0f, -36.0f, 0.0f));
+    m_state.spawnpoints[0].set_speed(0.0f);
+    m_state.spawnpoints[0].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    m_state.spawnpoints[0].m_animation_indices = m_state.spawnpoints[0].m_walking[RIGHT];
+
+    m_state.spawnpoints[1].m_walking[LEFT] = new int[1] { 1 };
+    m_state.spawnpoints[1].m_walking[RIGHT] = new int[1] { 3 };
+    m_state.spawnpoints[1].m_animation_frames = 1;
+    m_state.spawnpoints[1].m_animation_index = 0;
+    m_state.spawnpoints[1].m_animation_time = 0.0f;
+    m_state.spawnpoints[1].m_animation_cols = 1;
+    m_state.spawnpoints[1].m_animation_rows = 1;
+    m_state.spawnpoints[1].m_texture_id = Utility::load_texture("assets/images/cat.png");
+    m_state.spawnpoints[1].set_position(glm::vec3(36.0f, -33.5f, 0.0f));
+    m_state.spawnpoints[1].set_speed(0.0f);
+    m_state.spawnpoints[1].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    m_state.spawnpoints[1].m_animation_indices = m_state.spawnpoints[1].m_walking[RIGHT];
+
+    m_state.spawnpoints[2].m_walking[LEFT] = new int[1] { 1 };
+    m_state.spawnpoints[2].m_walking[RIGHT] = new int[1] { 3 };
+    m_state.spawnpoints[2].m_animation_frames = 1;
+    m_state.spawnpoints[2].m_animation_index = 0;
+    m_state.spawnpoints[2].m_animation_time = 0.0f;
+    m_state.spawnpoints[2].m_animation_cols = 1;
+    m_state.spawnpoints[2].m_animation_rows = 1;
+    m_state.spawnpoints[2].m_texture_id = Utility::load_texture("assets/images/cat.png");
+    m_state.spawnpoints[2].set_position(glm::vec3(3.0f, -23.5f, 0.0f));
+    m_state.spawnpoints[2].set_speed(0.0f);
+    m_state.spawnpoints[2].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    m_state.spawnpoints[2].m_animation_indices = m_state.spawnpoints[2].m_walking[RIGHT];
+
+    
+
     //Goal
-    m_state.goal = new Goal();
-    m_state.goal->m_walking[m_state.goal->LEFT] = new int[4] { 1, 5, 9, 13 };
-    m_state.goal->m_walking[m_state.goal->RIGHT] = new int[4] { 3, 7, 11, 15 };
-    m_state.goal->m_animation_frames = 4;
-    m_state.goal->m_animation_index = 0;
-    m_state.goal->m_animation_time = 0.0f;
-    m_state.goal->m_animation_cols = 4;
-    m_state.goal->m_animation_rows = 4;
-    m_state.goal->m_texture_id = Utility::load_texture("assets/images/cat.png");
-    m_state.goal->set_position(glm::vec3(49.0f, -8.1f, 0.0f));
-    m_state.goal->set_speed(0.0f);
-    m_state.goal->set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
-    m_state.goal->m_animation_indices = m_state.goal->m_walking[m_state.goal->LEFT];
-    m_state.enemies->set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
+    m_state.goals = new Goal[GOAL_COUNT];
+    m_state.goals[0].m_walking[m_state.goals[0].LEFT] = new int[1] {0};
+    m_state.goals[0].m_animation_frames = 1;
+    m_state.goals[0].m_animation_index = 0;
+    m_state.goals[0].m_animation_time = 0.0f;
+    m_state.goals[0].m_animation_cols = 10;
+    m_state.goals[0].m_animation_rows = 1;
+    m_state.goals[0].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[0].set_position(glm::vec3(40.0f, -39.0f, 0.0f));
+    m_state.goals[0].set_speed(0.0f);
+    m_state.goals[0].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[0].set_scale(glm::vec3(0.5f));
+    m_state.goals[0].m_animation_indices = m_state.goals[0].m_walking[m_state.goals[0].LEFT];
+
+    m_state.goals[1].m_walking[m_state.goals[1].LEFT] = new int[1] {1};
+    m_state.goals[1].m_animation_frames = 1;
+    m_state.goals[1].m_animation_index = 0;
+    m_state.goals[1].m_animation_time = 0.0f;
+    m_state.goals[1].m_animation_cols = 10;
+    m_state.goals[1].m_animation_rows = 1;
+    m_state.goals[1].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[1].set_position(glm::vec3(13.0f, -32.0f, 0.0f));
+    m_state.goals[1].set_speed(0.0f);
+    m_state.goals[1].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[1].set_scale(glm::vec3(0.5f));
+    m_state.goals[1].m_animation_indices = m_state.goals[1].m_walking[m_state.goals[1].LEFT];
+
+    m_state.goals[2].m_walking[m_state.goals[2].LEFT] = new int[1] {2};
+    m_state.goals[2].m_animation_frames = 1;
+    m_state.goals[2].m_animation_index = 0;
+    m_state.goals[2].m_animation_time = 0.0f;
+    m_state.goals[2].m_animation_cols = 10;
+    m_state.goals[2].m_animation_rows = 1;
+    m_state.goals[2].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[2].set_position(glm::vec3(21.0f, -34.0f, 0.0f));
+    m_state.goals[2].set_speed(0.0f);
+    m_state.goals[2].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[2].set_scale(glm::vec3(0.5f));
+    m_state.goals[2].m_animation_indices = m_state.goals[2].m_walking[m_state.goals[2].LEFT];
+
+    m_state.goals[3].m_walking[m_state.goals[3].LEFT] = new int[1] {3};
+    m_state.goals[3].m_animation_frames = 1;
+    m_state.goals[3].m_animation_index = 0;
+    m_state.goals[3].m_animation_time = 0.0f;
+    m_state.goals[3].m_animation_cols = 10;
+    m_state.goals[3].m_animation_rows = 1;
+    m_state.goals[3].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[3].set_position(glm::vec3(26.0f, -34.0f, 0.0f));
+    m_state.goals[3].set_speed(0.0f);
+    m_state.goals[3].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[3].set_scale(glm::vec3(0.5f));
+    m_state.goals[3].m_animation_indices = m_state.goals[3].m_walking[m_state.goals[3].LEFT];
+
+    m_state.goals[4].m_walking[m_state.goals[4].LEFT] = new int[1] {4};
+    m_state.goals[4].m_animation_frames = 1;
+    m_state.goals[4].m_animation_index = 0;
+    m_state.goals[4].m_animation_time = 0.0f;
+    m_state.goals[4].m_animation_cols = 10;
+    m_state.goals[4].m_animation_rows = 1;
+    m_state.goals[4].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[4].set_position(glm::vec3(46.5f, -18.5f, 0.0f));
+    m_state.goals[4].set_speed(0.0f);
+    m_state.goals[4].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[4].set_scale(glm::vec3(0.5f));
+    m_state.goals[4].m_animation_indices = m_state.goals[4].m_walking[m_state.goals[4].LEFT];
+
+    m_state.goals[5].m_walking[m_state.goals[5].LEFT] = new int[1] {5};
+    m_state.goals[5].m_animation_frames = 1;
+    m_state.goals[5].m_animation_index = 0;
+    m_state.goals[5].m_animation_time = 0.0f;
+    m_state.goals[5].m_animation_cols = 10;
+    m_state.goals[5].m_animation_rows = 1;
+    m_state.goals[5].m_texture_id = Utility::load_texture("assets/images/sigils.png");
+    m_state.goals[5].set_position(glm::vec3(40.5f, -18.5f, 0.0f));
+    m_state.goals[5].set_speed(0.0f);
+    m_state.goals[5].set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+    m_state.goals[5].set_scale(glm::vec3(0.5f));
+    m_state.goals[5].m_animation_indices = m_state.goals[5].m_walking[m_state.goals[5].LEFT];
 
     
     m_state.jump_sfx = Mix_LoadWAV("assets/audio/woop.wav");
@@ -278,15 +461,28 @@ void LevelA::update(float delta_time)
 {
     m_state.player->update(delta_time, m_state.player, m_state.enemies, ENEMY_COUNT, m_state.map);
 
-    m_state.goal->update(delta_time, m_state.player, m_state.enemies, ENEMY_COUNT, m_state.map);
     
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
         m_state.enemies[i].update(delta_time, m_state.player, 0, 0, m_state.map);
     }
 
-    if (m_state.goal->level_win()) {
-        m_state.next_scene_id = 2; //go to level B
+    for (int i = 0; i < SPAWNPOINT_COUNT; i++)
+    {
+        m_state.spawnpoints[i].update(delta_time, m_state.player, 0, 0, m_state.map);
+        if (m_state.spawnpoints[i].touched()) {
+            m_state.spawnpoints[i].reset_touched();
+            m_spawn = m_state.spawnpoints[i].get_position();
+        }
+    }
+
+    for (int i = 0; i < GOAL_COUNT; i++)
+    {
+        m_state.goals[i].update(delta_time, m_state.player, 0, 0, m_state.map);
+        if (m_state.goals[i].picked()) {
+            m_state.goals[i].unpick();
+            m_score++;
+        }
     }
 }
 
@@ -295,9 +491,17 @@ void LevelA::render(ShaderProgram *program)
 {
     m_state.map->render(program);
     m_state.player->render(program);
-    m_state.goal->render(program);
+    
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
         m_state.enemies[i].render(program);
+    }
+    for (int i = 0; i < SPAWNPOINT_COUNT; i++)
+    {
+        m_state.spawnpoints[i].render(program);
+    }
+    for (int i = 0; i < GOAL_COUNT; i++)
+    {
+        m_state.goals[i].render(program);
     }
 }

@@ -14,9 +14,6 @@ class Enemy : public Entity {
     void ai_stalk(Entity* player, float delta_time, Map* map);
     void ai_follow(Entity* player, float delta_time, Map* map);
 
-    void const check_collision_y(Entity* collidable_entities, int collidable_entity_count) override;
-    void const check_collision_x(Entity* collidable_entities, int collidable_entity_count) override;
-
     glm::vec4 m_patrol_area;
 
     bool check_player_in_area(Entity* player);

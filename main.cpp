@@ -90,6 +90,8 @@ Scene* g_levels[3];
 
 int g_lives = 3;
 
+glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
+
 
 void switch_shader(const char v_path[], const char f_path[]) {
     g_shader_program.load(v_path, f_path);
@@ -150,8 +152,10 @@ void initialise()
     g_levels[1] = g_level_a;
     g_levels[2] = g_win_scene;
 
+
     // Start at menu
     switch_to_scene(g_levels[0]);
+    g_levels[1]->set_spawn(g_spawn_point);
 
     //Mix_PlayMusic(Mix_LoadMUS("assets/audio/slight_better_song.wav"), -1);
     Mix_VolumeMusic(3.0f);

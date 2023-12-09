@@ -156,7 +156,7 @@ void Enemy::ai_follow(Entity* player, float delta_time, Map* map) {
         break;
     case INACTIVE:
         m_attack_timer += delta_time;
-        if (m_attack_timer > 5) {
+        if (m_attack_timer > 4) {
             activate();
             m_ai_state = ATTACKING;
         }
@@ -168,16 +168,6 @@ void Enemy::ai_follow(Entity* player, float delta_time, Map* map) {
     }
 }
 
-
-void const Enemy::check_collision_y(Entity* collidable_entities, int collidable_entity_count)
-{
-    return;
-}
-
-void const Enemy::check_collision_x(Entity* collidable_entities, int collidable_entity_count)
-{
-	return;
-}
 
 bool Enemy::check_player_in_area(Entity* player)
 {
