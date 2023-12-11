@@ -38,6 +38,6 @@ void Win::update(float delta_time)
 
 void Win::render(ShaderProgram* program)
 {
-    Utility::draw_text(text_texture_id, "YOU WIN!", 0.6f, -0.1f, glm::vec3(0.0f, 0.0f, 0));
-    Utility::draw_text(text_texture_id, "Thanks for playing", 0.4f, -0.1f, glm::vec3(0.0f, -0.5f, 0));
+    Utility::draw_text(text_texture_id, "YOU WIN?", 0.6f, -0.1f, glm::vec3(-2.0f, 0.0f, 0));
+    Utility::draw_text(text_texture_id, "Thanks for playing", 0.4f, -0.1f, glm::vec3(-1.25f, -0.5f, 0));
 }

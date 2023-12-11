@@ -18,6 +18,7 @@ Spawnpoint::Spawnpoint()
     text_texture_id = Utility::load_texture("assets/fonts/handwritten_capitals.png");
 }
 
+
 void Spawnpoint::update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map)
 {
     if (!m_is_active) return;
@@ -44,6 +45,12 @@ void Spawnpoint::update(float delta_time, Entity* player, Entity* objects, int o
 
     if (check_collision(player))
     {
+        m_accumulator += delta_time;
+        if (m_accumulator >= m_display_time) {
+            m_accumulator = 0;
+            m_dialogue_index++;
+        }
+
         m_touched = true;
     }
 
@@ -54,7 +61,8 @@ void Spawnpoint::update(float delta_time, Entity* player, Entity* objects, int o
 
 void Spawnpoint::render(ShaderProgram* program)
 {
-    Utility::draw_text(text_texture_id, "PRESS ENTER", 0.25f, -0.1f, m_position + glm::vec3(-0.4f, 0.5f, 0.0f));
+    if(m_dialogue_index < m_dialogue_size)
+    Utility::draw_text(text_texture_id, m_dialogue[m_dialogue_index], 0.25f, -0.1f, m_position + glm::vec3(-1.0f, 0.5f, 0.0f));
 
     Entity::render(program);
 }

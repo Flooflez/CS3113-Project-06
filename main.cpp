@@ -76,7 +76,6 @@ bool g_game_is_running = true;
 bool g_game_over = false;
 bool g_game_win = false;
 bool g_game_start = false;
-std::string g_display_message = "hewoo world!";
 
 ShaderProgram g_shader_program;
 glm::mat4 g_view_matrix, g_projection_matrix;
@@ -294,14 +293,13 @@ void update()
 
 
         g_score = g_current_scene->m_score; //update score
-
-        if(g_score == 10){
+        if(g_score == 1){
             //WIN!
-            switch_shader(V_SHADER_PATH, F_SHADER_PATH);
-            switch_to_scene(g_levels[g_current_scene_index + 1]);
             g_score = 0;
+            switch_shader(V_SHADER_PATH, F_SHADER_PATH);
+            g_current_scene_index++;
+            switch_to_scene(g_levels[g_current_scene_index]);
             return;
-            
         }
 
         if (!g_current_scene->m_state.player->get_active()) {
@@ -369,12 +367,6 @@ void render()
 
     // ————— RENDERING THE SCENE (i.e. map, character, enemies...) ————— //
     g_current_scene->render(&g_shader_program);
-
-    // ----- TEXT ----- //
-    //float draw_x = g_current_scene->m_state.player->get_position().x;
-    //float draw_y = g_current_scene->m_state.player->get_position().y + 2.0f;
-
-    //Utility::draw_text(g_text_texture_id, g_display_message, 0.4f, -0.1f, glm::vec3(draw_x, draw_y, 0));
     
     g_effects->render();
 

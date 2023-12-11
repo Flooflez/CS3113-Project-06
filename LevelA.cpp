@@ -70,14 +70,6 @@ unsigned int LEVELA_DATA[] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0,
 };
 
-/*
-* first room needs spawn point, then jumpscare enemy in tunnel, side tunnel should have some sign/npc just to distract
-* second big room introduce stalker enemy, player needs to turn around and look at it to survive
-* at the end they reach a big tunnel with one big jumpscare enemy in it.
-* they actually have to approach the enemy and just skim past upwards
-* Then second one just for funsies at the side tunnel
-*/
-
 LevelA::~LevelA()
 {
     delete [] m_state.enemies;
@@ -287,7 +279,7 @@ void LevelA::initialise()
     m_state.enemies[8].set_width(0.3f);
     m_state.enemies[8].set_height(0.8f);
     m_state.enemies[8].deactivate();
-    m_state.enemies[8].set_patrol_area(glm::vec4(0.0f, -14.0f, 22.0f, -4.0f));
+    m_state.enemies[8].set_patrol_area(glm::vec4(22.0f, -4.0f, 0.0f, -14.0f));
 
     m_state.enemies[9].m_walking[LEFT] = new int[2] { 0, 1 };
     m_state.enemies[9].m_walking[RIGHT] = new int[2] { 2, 3};
@@ -306,7 +298,7 @@ void LevelA::initialise()
     m_state.enemies[9].set_width(0.8f);
     m_state.enemies[9].set_height(0.8f);
     m_state.enemies[9].deactivate();
-    m_state.enemies[9].set_patrol_area(glm::vec4(6.0f, -26.0f, 38.0f, -15.0f));
+    m_state.enemies[9].set_patrol_area(glm::vec4(38.0f, -15.0f, 6.0f, -26.0f));
 
     m_state.enemies[10].m_walking[LEFT] = new int[1] { 3 };
     m_state.enemies[10].m_walking[RIGHT] = new int[1] { 1};
@@ -327,7 +319,7 @@ void LevelA::initialise()
     m_state.enemies[10].set_width(0.3f);
     m_state.enemies[10].set_height(0.8f);
     m_state.enemies[10].deactivate();
-    m_state.enemies[10].set_patrol_area(glm::vec4(6.0f, -26.0f, 38.0f, -15.0f));
+    m_state.enemies[10].set_patrol_area(glm::vec4(38.0f, -15.0f, 6.0f, -26.0f));
 
     m_state.enemies[11].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
     m_state.enemies[11].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
@@ -369,21 +361,56 @@ void LevelA::initialise()
     m_state.spawnpoints[0].set_position(glm::vec3(44.0f, -36.0f, 0.0f));
     m_state.spawnpoints[0].set_speed(0.0f);
     m_state.spawnpoints[0].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    const char** dialogue_0 = new const char* [8];
+    dialogue_0[0] = "TALK TO ME";
+    dialogue_0[1] = "YOU ARE STUCK";
+    dialogue_0[2] = "NOT THE FIRST";
+    dialogue_0[3] = "MANY HAVE DIED";
+    dialogue_0[4] = "I WILL HELP YOU";
+    dialogue_0[5] = "COLLECT TEN PAPERS";
+    dialogue_0[6] = "I AM WATCHING";
+    dialogue_0[7] = "I WILL SEE YOU AGAIN";
+    m_state.spawnpoints[0].set_dialogue(8, dialogue_0);
 
     m_state.spawnpoints[1].m_texture_id = Utility::load_texture("assets/images/doll.png");
     m_state.spawnpoints[1].set_position(glm::vec3(1.0f, -38.25f, 0.0f));
     m_state.spawnpoints[1].set_speed(0.0f);
     m_state.spawnpoints[1].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    const char** dialogue_1 = new const char* [6];
+    dialogue_1[0] = "STILL ALIVE";
+    dialogue_1[1] = "GOOD";
+    dialogue_1[2] = "YOU SHOULD HAVE ONE PAPER";
+    dialogue_1[3] = "THREE MORE AHEAD";
+    dialogue_1[4] = "I AM WATCHING";
+    dialogue_1[5] = "I WILL SEE YOU AGAIN";
+    m_state.spawnpoints[1].set_dialogue(6, dialogue_1);
 
     m_state.spawnpoints[2].m_texture_id = Utility::load_texture("assets/images/doll.png");
     m_state.spawnpoints[2].set_position(glm::vec3(36.0f, -33.5f, 0.0f));
     m_state.spawnpoints[2].set_speed(0.0f);
     m_state.spawnpoints[2].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    const char** dialogue_2 = new const char* [8];
+    dialogue_2[0] = "STILL ALIVE";
+    dialogue_2[1] = "GOOD";
+    dialogue_2[2] = "TWO MORE AHEAD";
+    dialogue_2[3] = "DANGER AWAITS";
+    dialogue_2[4] = "NEW FORMS OF EVIL";
+    dialogue_2[5] = "GOOD LUCK";
+    dialogue_2[6] = "I AM WATCHING";
+    dialogue_2[7] = "I WILL SEE YOU AGAIN";
+    m_state.spawnpoints[2].set_dialogue(8, dialogue_2);
 
     m_state.spawnpoints[3].m_texture_id = Utility::load_texture("assets/images/doll.png");
     m_state.spawnpoints[3].set_position(glm::vec3(3.0f, -23.5f, 0.0f));
     m_state.spawnpoints[3].set_speed(0.0f);
     m_state.spawnpoints[3].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+    const char** dialogue_3 = new const char* [5];
+    dialogue_3[0] = "YOUR FINAL TRIAL";
+    dialogue_3[1] = "THREE MORE AHEAD";
+    dialogue_3[2] = "YOUR ESCAPE IS IMMINENT";
+    dialogue_3[3] = "YOU WILL BE FREE";
+    dialogue_3[4] = "GOOD LUCK";
+    m_state.spawnpoints[3].set_dialogue(5, dialogue_3);
     
 
     //Goal
