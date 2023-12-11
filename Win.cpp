@@ -15,7 +15,6 @@
 
 Win::~Win()
 {
-    Mix_FreeChunk(m_state.jump_sfx);
     Mix_FreeMusic(m_state.bgm);
 }
 

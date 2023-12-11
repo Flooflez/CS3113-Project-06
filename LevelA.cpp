@@ -84,7 +84,6 @@ LevelA::~LevelA()
     delete [] m_state.spawnpoints;
     delete    m_state.player;
     delete    m_state.map;
-    Mix_FreeChunk(m_state.jump_sfx);
     Mix_FreeMusic(m_state.bgm);
 }
 
@@ -372,7 +371,7 @@ void LevelA::initialise()
     m_state.spawnpoints[0].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
 
     m_state.spawnpoints[1].m_texture_id = Utility::load_texture("assets/images/doll.png");
-    m_state.spawnpoints[1].set_position(glm::vec3(1.0f, -38.0f, 0.0f));
+    m_state.spawnpoints[1].set_position(glm::vec3(1.0f, -38.25f, 0.0f));
     m_state.spawnpoints[1].set_speed(0.0f);
     m_state.spawnpoints[1].set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -521,13 +520,10 @@ void LevelA::initialise()
     m_state.goals[9].m_animation_indices = m_state.goals[9].m_walking[LEFT];
 
 
-
     for (int i = 0; i < m_score; i++) {
         m_state.goals[i].deactivate();
     }
 
-    
-    m_state.jump_sfx = Mix_LoadWAV("assets/audio/woop.wav");
 }
 
 void LevelA::update(float delta_time)

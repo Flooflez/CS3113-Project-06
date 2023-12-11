@@ -6,6 +6,8 @@ class Spawnpoint : public Entity {
 protected:
     bool m_touched = false;
     GLuint text_texture_id;
+
+
 public:
     Spawnpoint();
 

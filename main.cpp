@@ -96,6 +96,8 @@ bool g_scene_changing = false;
 
 glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
 
+Mix_Chunk* g_scare_sound;
+
 
 void switch_shader(const char v_path[], const char f_path[]) {
     g_shader_program.load(v_path, f_path);
@@ -123,7 +125,7 @@ void initialise()
 {
     // ————— VIDEO ————— //
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    g_display_window = SDL_CreateWindow("Stomp on 'em!",
+    g_display_window = SDL_CreateWindow("The Caves",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH, WINDOW_HEIGHT,
         SDL_WINDOW_OPENGL);
@@ -158,7 +160,7 @@ void initialise()
     g_levels[1]->set_spawn(g_spawn_point);
 
     Mix_PlayMusic(Mix_LoadMUS("assets/audio/spooky.wav"), -1);
-    Mix_VolumeMusic(3.5f);
+    Mix_VolumeMusic(5.0f);
 
     
 
@@ -172,6 +174,8 @@ void initialise()
     g_effects = new Effects(g_projection_matrix, g_view_matrix);
     g_jumpscare = new Jumpscare();
     g_jumpscare->initialise();
+
+    g_scare_sound = Mix_LoadWAV("assets/audio/scare.wav");
 }
 
 void process_input()
@@ -194,16 +198,6 @@ void process_input()
             case SDLK_q:
                 // Quit the game with a keystroke
                 g_game_is_running = false;
-                break;
-
-            case SDLK_SPACE:
-                // ————— JUMPING ————— //
-                if (g_current_scene->m_state.player->m_collided_bottom)
-                {
-                    g_current_scene->m_state.player->m_is_jumping = true;
-                    Mix_PlayChannel(-1, g_current_scene->m_state.jump_sfx, 0);
-                    Mix_Volume(-1, MIX_MAX_VOLUME / 15);
-                }
                 break;
             case SDLK_RETURN:
                 //start game
@@ -284,7 +278,8 @@ void update()
             g_effects->update(delta_time, 0);
 
             if (g_effects->get_alpha() >= 1) {
-                switch_to_scene(g_levels[g_current_scene_index + 1]);
+                g_current_scene_index++;
+                switch_to_scene(g_levels[g_current_scene_index]);
                 switch_shader(V_LIT_SHADER_PATH, F_LIT_SHADER_PATH);
                 g_effects->start(FADEIN, 0.05f);
                 g_view_matrix = glm::mat4(1.0f);
@@ -334,6 +329,9 @@ void update()
                         break;
                     }
                     g_effects->start(BLACK, 0);
+
+                    Mix_PlayChannel(-1, g_scare_sound, 0);
+                    Mix_Volume(-1, 10.0f);
                 }
             }
         }
