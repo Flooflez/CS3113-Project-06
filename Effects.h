@@ -14,7 +14,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-enum EffectType { NONE, TINT, BLACK};
+enum EffectType { NONE, TINT, BLACK, FADEIN, FADEOUT};
 
 class Effects {
 private:
@@ -35,4 +35,6 @@ public:
     void start(EffectType effect_type, float effect_speed);
     void update(float delta_time, float param);
     void render();
+
+    float get_alpha() { return m_alpha; }
 };

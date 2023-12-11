@@ -78,7 +78,7 @@ public:
 
     void draw_sprite_from_texture_atlas(ShaderProgram* program, GLuint texture_id, int index);
     virtual void update(float delta_time, Entity* player, Entity* objects, int object_count, Map* map) = 0; // Now, update should check for both objects in the game AND the map
-    void render(ShaderProgram* program);
+    virtual void render(ShaderProgram* program);
 
     bool const check_collision(Entity* other) const;
     

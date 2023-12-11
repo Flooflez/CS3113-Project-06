@@ -35,7 +35,7 @@ void Effects::draw_overlay()
     glDisableVertexAttribArray(m_program.get_position_attribute());
 }
 
-void Effects::start(EffectType effect_type, float effect_speed = 0)
+void Effects::start(EffectType effect_type, float effect_speed)
 {
     m_current_effect = effect_type;
     m_effect_speed = effect_speed;
@@ -43,6 +43,8 @@ void Effects::start(EffectType effect_type, float effect_speed = 0)
     switch (m_current_effect)
     {
     case NONE:                         break;
+    case FADEIN:  m_alpha = 1.0f;  break;
+    case FADEOUT: m_alpha = 0.0f;  break;
     }
 }
 
@@ -58,6 +60,13 @@ void Effects::update(float delta_time, float param)
     case TINT:
         m_alpha = param;
         if (m_alpha <= 0) m_current_effect = NONE;
+        break;
+    case FADEIN:
+        m_alpha -= delta_time * m_effect_speed;
+        if (m_alpha <= 0) m_current_effect = NONE;
+        break;
+    case FADEOUT:
+        if (m_alpha < 1.0f) m_alpha += delta_time * m_effect_speed;
         break;
     }
 }
@@ -83,6 +92,15 @@ void Effects::render()
         this->m_program.set_model_matrix(model_matrix);
         this->m_program.set_colour(0.15f, 0.0f, 0.0f, 1.0);
         this->draw_overlay();
+        break;
+    case FADEOUT:
+    case FADEIN:
+        // Expand the current square a bit
+        model_matrix = glm::scale(model_matrix, m_size);
+        this->m_program.set_model_matrix(model_matrix);
+        this->m_program.set_colour(0.0f, 0.0f, 0.0f, m_alpha);
+        this->draw_overlay();
+
         break;
     }
 }

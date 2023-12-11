@@ -29,6 +29,7 @@ void Menu::initialise()
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 
 
+
     //fake player so program doesn't crash
     m_state.player = new Player();
     m_state.player->set_position(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -47,6 +48,6 @@ void Menu::update(float delta_time)
 
 void Menu::render(ShaderProgram* program)
 {
-    Utility::draw_text(text_texture_id, "Cat Wrangler", 0.6f, -0.1f, glm::vec3(2.4f, 1.0f, 0));
-    Utility::draw_text(text_texture_id, "! ~ PRESS ENTER TO START ~ !", 0.4f, -0.1f, glm::vec3(1.0f, 0.0f, 0));
+    Utility::draw_text(text_texture_id, "The Caves", 0.6f, -0.1f, glm::vec3(-1.0f, 1.0f, 0));
+    Utility::draw_text(text_texture_id, "PRESS ENTER", 0.4f, -0.1f, glm::vec3(0.0f, 0.0f, 0));
 }

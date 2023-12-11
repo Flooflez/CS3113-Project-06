@@ -92,9 +92,9 @@ int g_score = 0;
 
 Effects *g_effects;
 Jumpscare* g_jumpscare;
+bool g_scene_changing = false;
 
-//glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
-glm::vec3 g_spawn_point = glm::vec3(37.0f, -28.0f, 0.0f);
+glm::vec3 g_spawn_point = glm::vec3(48.0f, -48.0f, 0.0f);
 
 
 void switch_shader(const char v_path[], const char f_path[]) {
@@ -157,8 +157,8 @@ void initialise()
     switch_to_scene(g_levels[0]);
     g_levels[1]->set_spawn(g_spawn_point);
 
-    //Mix_PlayMusic(Mix_LoadMUS("assets/audio/slight_better_song.wav"), -1);
-    Mix_VolumeMusic(3.0f);
+    Mix_PlayMusic(Mix_LoadMUS("assets/audio/spooky.wav"), -1);
+    Mix_VolumeMusic(3.5f);
 
     
 
@@ -209,10 +209,11 @@ void process_input()
                 //start game
                 if (!g_game_start) {
                     g_game_start = true;
+                    g_scene_changing = true;
+                    g_effects->start(FADEOUT, 0.1f);
+                    //switch_shader(V_LIT_SHADER_PATH, F_LIT_SHADER_PATH);
                     
-                    switch_shader(V_LIT_SHADER_PATH, F_LIT_SHADER_PATH);
-                    
-                    g_current_scene->m_state.next_scene_id = 1;
+                    //g_current_scene->m_state.next_scene_id = 1;
                 }
                 break;
             default:
@@ -278,6 +279,25 @@ void update()
     while (delta_time >= FIXED_TIMESTEP) {
         // ————— UPDATING THE SCENE (i.e. map, character, enemies...) ————— //
         g_current_scene->update(FIXED_TIMESTEP);
+
+        if (g_scene_changing) {
+            g_effects->update(delta_time, 0);
+
+            if (g_effects->get_alpha() >= 1) {
+                switch_to_scene(g_levels[g_current_scene_index + 1]);
+                switch_shader(V_LIT_SHADER_PATH, F_LIT_SHADER_PATH);
+                g_effects->start(FADEIN, 0.05f);
+                g_view_matrix = glm::mat4(1.0f);
+                g_view_matrix = glm::translate(g_view_matrix, g_spawn_point);
+
+            }
+            else if (g_effects->get_alpha() <= 0) {
+                g_scene_changing = false;
+            }
+            return;
+        }
+
+
         g_score = g_current_scene->m_score; //update score
 
         if(g_score == 10){
@@ -313,12 +333,9 @@ void update()
                         g_jumpscare->play_follow(g_current_scene->m_state.player->get_position());
                         break;
                     }
-                    
                     g_effects->start(BLACK, 0);
                 }
-                
             }
-            
         }
         else {
             float tint_opacity = -0.01f * g_current_scene->m_state.player->get_sprint_time() + 0.1f;
@@ -332,7 +349,6 @@ void update()
         }
 
         g_jumpscare->update(delta_time);
-
         delta_time -= FIXED_TIMESTEP;
     }
 
@@ -341,7 +357,6 @@ void update()
 
     // ————— PLAYER CAMERA ————— //
     g_view_matrix = glm::mat4(1.0f);
-
     g_view_matrix = glm::translate(g_view_matrix, glm::vec3(-g_current_scene->m_state.player->get_position().x, -g_current_scene->get_state().player->get_position().y, 0));
 
 }
