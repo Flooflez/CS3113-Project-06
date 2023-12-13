@@ -1,7 +1,7 @@
 /**
 * Author: Maximilian Ta
-* Assignment: Platformer
-* Date due: 2023-12-02, 11:59pm
+* Assignment: The Caves (Final Project)
+* Date due: 2023-12-15, 11:59pm
 * I pledge that I have completed this assignment without
 * collaborating with anyone else, in conformance with the
 * NYU School of Engineering Policies and Procedures on
@@ -293,7 +293,7 @@ void update()
 
 
         g_score = g_current_scene->m_score; //update score
-        if(g_score == 1){
+        if(g_score == 10){
             //WIN!
             g_score = 0;
             switch_shader(V_SHADER_PATH, F_SHADER_PATH);
