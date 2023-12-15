@@ -236,12 +236,12 @@ void LevelA::initialise()
     m_state.enemies[6].set_ai_type(FOLLOW);
     m_state.enemies[6].set_ai_state(IDLE);
     m_state.enemies[6].m_texture_id = Utility::load_texture("assets/images/chase_monster.png");
-    m_state.enemies[6].set_position(glm::vec3(47.0f, -27.0f, 0.0f));
+    m_state.enemies[6].set_position(glm::vec3(47.0f, -26.0f, 0.0f));
     m_state.enemies[6].set_speed(1.0f);
     m_state.enemies[6].set_width(0.8f);
     m_state.enemies[6].set_height(0.8f);
     m_state.enemies[6].deactivate();
-    m_state.enemies[6].set_patrol_area(glm::vec4(49.0f, 0.0f,38.0f, -27.0f));
+    m_state.enemies[6].set_patrol_area(glm::vec4(49.0f, 0.0f,34.0f, -26.0f));
 
     m_state.enemies[7].m_walking[LEFT] = new int[4] { 1, 5, 9, 13 };
     m_state.enemies[7].m_walking[RIGHT] = new int[4] { 3, 7, 11, 15 };
