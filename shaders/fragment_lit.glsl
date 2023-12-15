@@ -14,7 +14,7 @@ void main()
 {
     // The brightness is directly based on the distance between the light source's
     // location and the pixel's location
-    float brightness = attenuate(distance(lightPosition, varPosition), 0.5, 1.25);
+    float brightness = attenuate(distance(lightPosition, varPosition), 0.3, 0.7);
     vec4 color = texture2D(diffuse, texCoordVar);
     gl_FragColor = vec4(color.rgb * brightness, color.a);
 }
